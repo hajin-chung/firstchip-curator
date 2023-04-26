@@ -1,12 +1,12 @@
 ---
 const { frontmatter } = Astro.props;
-import { ListButton } from "../components/ListButton";
+import ListButton  from "../components/ListButton.astro";
 import { Survey } from "../components/Survey";
 import Layout from "./Layout.astro";
 ---
 
 <Layout title={frontmatter.title}>
-  <ListButton client:load />
+  <ListButton />
   {
     frontmatter.images &&
       frontmatter.images.map((src: string) => (

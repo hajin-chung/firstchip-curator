@@ -1,0 +1,72 @@
+---
+const { frontmatter } = Astro.props;
+import { ListButton } from "../components/ListButton";
+import { Survey } from "../components/Survey";
+import Layout from "./Layout.astro";
+---
+
+<Layout title={frontmatter.title}>
+  <ListButton client:load />
+  {
+    frontmatter.images &&
+      frontmatter.images.map((src: string) => (
+        <img src={src} class="img drop-shadow-2xl" />
+      ))
+  }
+  <div class="desc">
+    <h1 class="title">{frontmatter.title}</h1>
+    <h2 class="author">{frontmatter.author}</h2>
+    <slot class="content" />
+  </div>
+  <div class="seperator"></div>
+  <Survey client:load />
+</Layout>
+
+<style>
+  @import url("https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&display=swap");
+
+  body {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin: 0;
+    font-family: "Nanum Myeongjo", serif;
+  }
+
+  main {
+    padding: 0 20px;
+    max-width: 640px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .desc {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin: 12px 20px;
+  }
+
+  .title {
+    font-size: 1.5rem;
+    font-weight: 800;
+    margin: 0;
+  }
+
+  .author {
+    font-size: 1rem;
+    font-weight: 700;
+    margin: 0;
+    margin-bottom: 20px;
+  }
+
+  .img {
+    border-radius: 12px;
+  }
+
+  .seperator {
+    height: 8px;
+  }
+</style>

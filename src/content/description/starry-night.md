@@ -1,5 +1,4 @@
 ---
-layout: ../../layouts/DescriptionLayout.astro
 title: 별이 빛나는 밤
 author: 빈센트 반 고흐
 images: ["https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg/1280px-Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg"]

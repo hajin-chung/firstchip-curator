@@ -1,10 +1,8 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import { getCollection } from "astro:content";
 
-const works = [
-  { url: "monalisa", title: "모나리자" },
-  { url: "starry-night", title: "별이 빛나는 밤" },
-];
+const descriptions = await getCollection("description");
 ---
 
 <Layout title="간단 큐레이터!">
@@ -13,9 +11,9 @@ const works = [
     <h1 class="text-2xl font-extrabold">작품 목록</h1>
     <div class="flex mt-8 flex-col gap-2 items-start">
       {
-        works.map(({ url, title }) => (
-          <a href={`/description/${url}`} class="hover:bg-slate-100 transition rounded-lg p-1">
-            {title}
+        descriptions.map(({ slug, data }) => (
+          <a href={`/description/${slug}`} class="hover:bg-slate-100 transition rounded-lg p-1">
+            {data.title}
           </a>
         ))
       }

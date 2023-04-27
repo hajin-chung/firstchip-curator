@@ -1,5 +1,4 @@
 ---
-layout: ../../layouts/DescriptionLayout.astro
 title: 모나리자
 author: 레오나르도 다 빈치 (1452 ~ 1519)
 images: ["https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_natural_color.jpg/800px-Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_natural_color.jpg"]

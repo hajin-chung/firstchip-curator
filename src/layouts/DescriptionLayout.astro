@@ -1,14 +1,14 @@
 ---
 const { frontmatter } = Astro.props;
-import ListButton  from "../components/ListButton.astro";
+import { ArrowButton } from "@components/ArrowButton";
 import { Survey } from "../components/Survey";
 import Layout from "./Layout.astro";
 ---
 
 <Layout title={frontmatter.title}>
-	<div>
-		<ListButton />
-	</div>
+  <div>
+    <ArrowButton client:load text="작품 목록 보러가기" href="/" />
+  </div>
   {
     frontmatter.images &&
       frontmatter.images.map((src: string) => (

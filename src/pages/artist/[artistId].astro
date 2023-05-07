@@ -1,0 +1,20 @@
+---
+import { ArrowButton } from "@components/ArrowButton";
+import Layout from "@layouts/Layout.astro";
+import { getArtistById } from "@lib/server";
+
+const { artistId } = Astro.props;
+
+if (typeof artistId !== "string") {
+	return Astro.redirect("/500");
+}
+
+const artist = await getArtistById(artistId);
+---
+
+<Layout title={`${artist.name}`}>
+  <div>
+    <ArrowButton client:load text="작품 목록 보러가기" href="/" />
+  </div>
+  <div class="h-2"></div>
+</Layout>

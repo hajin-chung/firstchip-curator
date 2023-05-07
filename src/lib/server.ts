@@ -10,3 +10,36 @@ const dbConfig = {
 
 const conn = connect(dbConfig);
 
+export const getArtById = async (artId: string) => {
+	const art = {
+		id: artId,
+		artistId: 0,
+		artistName: "artist name",
+		name: "art name",
+		description: "art desc",
+		images: [
+			"https://a.com",
+		]
+	}
+
+	return art;
+}
+
+export const getArtistById = async (artistId: string) => {
+	const artist = {
+		id: artistId,
+		name: "test name",
+		profile: "https://a.com",
+		arts: [
+			{
+				id: "123",
+				name: "test name",
+			}
+		]
+	}
+
+	return artist;
+}
+
+export const isAdmin = async () => {
+}

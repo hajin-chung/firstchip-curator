@@ -40,7 +40,7 @@ export const getArtById = async (artId: string, artistId: string) => {
 
 export const getArtistById = async (artistId: string) => {
   const artistResult = await conn.execute(
-    "SELECT id, name, profile FROM artist WHERE id=?",
+    "SELECT id, name, picture FROM artist WHERE id=?",
     [artistId]
   );
   const artResult = await conn.execute(

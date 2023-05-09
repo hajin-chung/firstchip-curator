@@ -6,7 +6,7 @@
     "dev": "astro dev",
     "start": "astro dev",
     "build": "astro build",
-    "preview": "astro preview",
+    "preview": "wrangler pages dev ./dist --proxy=3000",
     "astro": "astro"
   },
   "dependencies": {
@@ -22,6 +22,7 @@
     "tailwindcss": "^3.0.24"
   },
   "devDependencies": {
-    "@astrojs/partytown": "^1.2.0"
+    "@astrojs/partytown": "^1.2.0",
+    "wrangler": "^2.20.0"
   }
 }

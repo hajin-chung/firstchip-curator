@@ -1,0 +1,28 @@
+---
+import { ArrowButton } from "@components/ArrowButton";
+import Layout from "@layouts/Layout.astro";
+import { getArtistById } from "@lib/server";
+
+const { artistId } = Astro.params;
+
+if (typeof artistId !== "string") {
+  return Astro.redirect("/500");
+}
+
+const { artist, arts } = await getArtistById(artistId);
+
+if (artist === undefined) {
+  return Astro.redirect("/404");
+}
+---
+
+<Layout title={`${artist.name}`}>
+  <div>
+    <ArrowButton client:load text="작품 목록 보러가기" href="/" />
+  </div>
+  <div class="text-xl font-bold">{artist.name}</div>
+  <img src={artist.profile} class="h-6 w-6" />
+  <div class="flex flex-col gap-2">
+    {arts.map(({ id, name }) => <a href={`/art/${artist.id}/${id}`}>{name}</a>)}
+  </div>
+</Layout>

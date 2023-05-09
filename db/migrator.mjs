@@ -2,8 +2,8 @@
 // probably need to be a package as itself
 
 import 'dotenv/config';
-import {connect} from "@planetscale/database";
-import {readFile} from "fs/promises";
+import { connect } from "@planetscale/database";
+import { readFile } from "fs/promises";
 
 const config = {
 	host: process.env.DATABASE_HOST,

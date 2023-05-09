@@ -1,19 +1,24 @@
+drop table artist;
+drop table art;
+drop table image;
+
 CREATE TABLE artist (
-	id int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	id varchar(10) NOT NULL PRIMARY KEY,
 	name varchar(255) NOT NULL,
 	profile varchar(2048)
 );
 
 CREATE TABLE art (
-	id int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	id varchar(10) NOT NULL PRIMARY KEY,
 	name varchar(255) NOT NULL,
 	description text,
-	artist_id int,
-	KEY artist_id_idx (artist_id)
+	artistId varchar(10),
+	KEY artistIdIdx (artistId)
 );
 
 CREATE TABLE image (
-	id int NOT NULL AUTO_INCREMENT PRIMARY KEY,
-	art_id int,
-	KEY art_id_idx (art_id)
+	id varchar(10) NOT NULL PRIMARY KEY,
+	url varchar(2048) NOT NULL,
+	artId varchar(10),
+	KEY artIdIdx (artId)
 );

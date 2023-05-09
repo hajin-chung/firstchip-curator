@@ -22,6 +22,9 @@ dependencies:
   dotenv:
     specifier: ^16.0.3
     version: 16.0.3
+  jwt-decode:
+    specifier: ^3.1.2
+    version: 3.1.2
   solid-js:
     specifier: ^1.4.3
     version: 1.7.3
@@ -1815,6 +1818,10 @@ packages:
 
   /jsonc-parser@3.2.0:
     resolution: {integrity: sha512-gfFQZrcTc8CnKXp6Y4/CBT3fTc0OVuDofpre4aEeEpSBPV5X5v4+Vmx+8snU7RLPrNHPKSgLxGo9YuQzz20o+w==}
+    dev: false
+
+  /jwt-decode@3.1.2:
+    resolution: {integrity: sha512-UfpWE/VZn0iP50d8cz9NrZLM9lSWhcJ+0Gt/nm4by88UL+J1SiKN8/5dkjMmbEzwL2CAe+67GsegCbIKtbp75A==}
     dev: false
 
   /kind-of@6.0.3:

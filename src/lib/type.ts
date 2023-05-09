@@ -1,7 +1,9 @@
 export type Artist = {
   id: string;
   name: string;
-  profile: string;
+	email: string;
+	sub: string;
+  picture: string;
 };
 
 export type Art = {
@@ -16,3 +18,5 @@ export type Image = {
   url: string;
   artId: string;
 };
+
+export const SESSION_DURATION = 1000 * 60 * 60 * 24; // 1 day in ms

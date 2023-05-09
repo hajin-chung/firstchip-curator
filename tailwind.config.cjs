@@ -5,6 +5,11 @@ module.exports = {
 		extend: {
 			fontFamily: {
 				'serif': "Nanum Myeongjo"
+			},
+			colors: {
+				yellow: {
+					kakao: "#f9e000"
+				}
 			}
 		},
 	},

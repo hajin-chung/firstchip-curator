@@ -1,8 +1,8 @@
 // server functions mainly fetching data from db
 
 import { connect } from "@planetscale/database";
-import type { Art, Artist, Image } from "./type";
-import { createId } from "@paralleldrive/cuid2";
+import { SESSION_DURATION, type Art, type Artist, type Image } from "./type";
+import { createId } from "@lib/utils";
 
 const dbConfig = {
   host: import.meta.env.DATABASE_HOST,
@@ -54,15 +54,46 @@ export const getArtistById = async (artistId: string) => {
   return { artist, arts };
 };
 
-export const createArtist = async ({
+// if sub doesn't exists, create new user
+// create session
+// return sessionId with expires
+export const authUser = async ({
   name,
-  profile = "",
-}: Pick<Artist, "name" | "profile">) => {
-  const id = createId();
-  const result = await conn.execute(
-    "INSERT INTO artist (id, name, profile) VALUES (?, ?, ?)",
-    [id, name, profile]
+  sub,
+  picture,
+  email,
+}: Pick<Artist, "name" | "sub" | "picture" | "email">) => {
+  // check sub exist
+  const checkRes = await conn.execute(
+    "SELECT sub, id FROM artist WHERE sub=?",
+    [sub]
   );
+  let artistId: string;
 
-  return result;
+  if (checkRes.rows.length === 0) {
+    // create user
+    artistId = createId();
+    const createRes = await conn.execute(
+      "INSERT INTO artist (id, name, email, sub, picture) VALUES (?, ?, ?, ?, ?)",
+      [artistId, name, email, sub, picture]
+    );
+    // TODO: check query success
+  } else {
+    artistId = (checkRes.rows[0] as Artist).id;
+  }
+
+  // create session
+  const sessionId = createId();
+  const sessionExpires = new Date(new Date().getTime() + SESSION_DURATION);
+  const sessionRes = await conn.execute(
+    "INSERT INTO session (id, artistId, expires) VALUES (?, ?, ?)",
+    [sessionId, artistId, sessionExpires.getTime()]
+  );
+  // TODO: check query success
+
+  return { sessionId, sessionExpires };
+};
+
+export const getArtistBySessionId = async (sessionId: string) => {
+  // return artist
 };

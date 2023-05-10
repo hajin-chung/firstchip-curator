@@ -24,12 +24,19 @@ export const post: APIRoute = async ({ request, cookies }) => {
     imageCount: number;
   };
 
-  const signedUrls = await createArt(
+  const { signedUrls, artId } = await createArt(
     name,
     description,
     artist.artistId,
     imageCount
   );
 
-  return new Response(JSON.stringify({ error: false, signedUrls }));
+  return new Response(
+    JSON.stringify({
+      error: false,
+      signedUrls,
+      artId,
+      artistId: artist.artistId,
+    })
+  );
 };

@@ -174,7 +174,7 @@ export const createArt = async (
     signedUrls.map(({ imageId }) => createImage(imageId, artId))
   );
 
-  return signedUrls;
+  return { signedUrls, artId };
 };
 
 export const createImage = async (id: string, artId: string) => {

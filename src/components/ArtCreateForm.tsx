@@ -34,9 +34,11 @@ export const ArtCreateForm: Component = () => {
       body: JSON.stringify(createArtBody),
     });
 
-    const { error, signedUrls } = (await res.json()) as {
+    const { error, signedUrls, artId, artistId } = (await res.json()) as {
       error: boolean;
       signedUrls: { imageId: string; signedUrl: string }[];
+			artId: string;
+			artistId: string;
     };
 		// TODO: handle error
 		console.log({error, signedUrls});
@@ -51,6 +53,10 @@ export const ArtCreateForm: Component = () => {
 				// handle res
       })
     );
+
+		if (window) {
+			window.location.href = `/art/${artistId}/${artId}`;
+		}
   };
 
   return (

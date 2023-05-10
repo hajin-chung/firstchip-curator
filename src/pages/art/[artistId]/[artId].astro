@@ -26,8 +26,8 @@ if (art === undefined || artist === undefined) {
   </div>
   {
     images &&
-      images.map(({ url }) => (
-        <img src={url} class="img drop-shadow-2xl rounded-lg" />
+      images.map((image) => (
+        <img src={image} class="img drop-shadow-2xl rounded-lg" />
       ))
   }
   <div class="flex flex-col gap-[2px] mx-3 my-5">

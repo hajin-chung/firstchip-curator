@@ -3,7 +3,11 @@
 import { connect } from "@planetscale/database";
 import { SESSION_DURATION, type Art, type Artist, type Image } from "./type";
 import { createId } from "@lib/utils";
-import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import {
+  GetObjectCommand,
+  PutObjectCommand,
+  S3Client,
+} from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
 const dbConfig = {
@@ -51,7 +55,17 @@ export const getArtById = async (artId: string, artistId: string) => {
   const artist = artistResult.rows[0] as Artist;
   const images = imagesResult.rows as Image[];
 
-  return { art, artist, images };
+  const imageUrls = await Promise.all(
+    images.map(({ id }) => {
+      return getSignedUrl(
+        S3,
+        new GetObjectCommand({ Bucket: BUCKET_NAME, Key: id }),
+        { expiresIn: PRESIGNED_URL_EXPIRES }
+      );
+    })
+  );
+
+  return { art, artist, images: imageUrls };
 };
 
 export const getArtistById = async (artistId: string) => {

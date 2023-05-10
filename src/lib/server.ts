@@ -3,6 +3,8 @@
 import { connect } from "@planetscale/database";
 import { SESSION_DURATION, type Art, type Artist, type Image } from "./type";
 import { createId } from "@lib/utils";
+import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
 const dbConfig = {
   host: import.meta.env.DATABASE_HOST,
@@ -11,6 +13,20 @@ const dbConfig = {
 };
 
 const conn = connect(dbConfig);
+
+const ACCOUNT_ID = import.meta.env.CLOUDFLARE_ACCOUNT_ID;
+const ACCESS_KEY = import.meta.env.R2_ACCESS_KEY;
+const SECRET_KEY = import.meta.env.R2_SECRET_KEY;
+const PRESIGNED_URL_EXPIRES = 3600;
+const BUCKET_NAME = import.meta.env.BUCKET_NAME;
+const S3 = new S3Client({
+  region: "auto",
+  endpoint: `https://${ACCOUNT_ID}.r2.cloudflarestorage.com`,
+  credentials: {
+    accessKeyId: ACCESS_KEY,
+    secretAccessKey: SECRET_KEY,
+  },
+});
 
 // async function execute<T>(query: string, args: any[] | undefined): Promise<T> {
 // 	const result = await conn.execute(query, args);
@@ -23,7 +39,7 @@ export const getArtById = async (artId: string, artistId: string) => {
     [artId]
   );
   const artistResult = await conn.execute(
-    "SELECT id, name, profile FROM artist WHERE id=?",
+    "SELECT id, name, picture FROM artist WHERE id=?",
     [artistId]
   );
   const imagesResult = await conn.execute(
@@ -94,6 +110,63 @@ export const authUser = async ({
   return { sessionId, sessionExpires };
 };
 
-export const getArtistBySessionId = async (sessionId: string) => {
+export const getAuthDataBySessionId = async (sessionId: string | undefined) => {
+  if (sessionId === undefined) {
+    return { isAuthed: false };
+  }
+
   // return artist
+  const artistRes = await conn.execute(
+    "SELECT artist.id as artistId, session.id as sessionId FROM artist LEFT JOIN session ON artist.id = session.artistId WHERE session.id = ?;",
+    [sessionId]
+  );
+
+  const artistData = artistRes.rows[0] as
+    | { artistId: string; sessionId: string }
+    | undefined;
+
+  return { isAuthed: !!artistData, artist: artistData };
+};
+
+export const createArt = async (
+  name: string,
+  description: string,
+  artistId: string,
+  imageCount: number
+) => {
+  const artId = createId();
+
+  const createArtRes = await conn.execute(
+    "INSERT INTO art (id, name, description, artistId) VALUES (?, ?, ?, ?)",
+    [artId, name, description, artistId]
+  );
+
+  // TODO: check query success
+
+  // generate imageCount image upload links
+  const signedUrls = await Promise.all(
+    [...Array(imageCount).keys()].map(async () => {
+      const imageId = createId();
+      const signedUrl = await getSignedUrl(
+        S3,
+        new PutObjectCommand({ Bucket: BUCKET_NAME, Key: imageId }),
+        { expiresIn: 3600 }
+      );
+      return { imageId, signedUrl };
+    })
+  );
+
+  await Promise.all(
+    signedUrls.map(({ imageId }) => createImage(imageId, artId))
+  );
+
+  return signedUrls;
+};
+
+export const createImage = async (id: string, artId: string) => {
+  const imageRes = await conn.execute(
+    "INSERT INTO image (id, artId, url) VALUES (?, ?, ?)",
+    [id, artId, ""]
+  );
+  // TODO: handle query res
 };

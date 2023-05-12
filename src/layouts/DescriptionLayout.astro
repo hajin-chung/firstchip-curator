@@ -7,7 +7,7 @@ import Layout from "./Layout.astro";
 
 <Layout title={frontmatter.title}>
   <div>
-    <ArrowButton text="작품 목록 보러가기" href="/" client:load />
+    <ArrowButton text="작품 목록 보러가기" href="/" client:only="solidjs" />
   </div>
   {
     frontmatter.images &&

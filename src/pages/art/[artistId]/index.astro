@@ -22,7 +22,7 @@ const { isAuthed, artist: authData } = await getAuthDataBySessionId(
 
 <Layout title={`${artist.name}`}>
   <div>
-    <ArrowButton client:load text="홈으로 돌아가기" href="/" />
+    <ArrowButton client:only="solidjs" text="홈으로 돌아가기" href="/" />
   </div>
   <img
     src={artist.picture}

@@ -20,7 +20,7 @@ if (art === undefined || artist === undefined) {
 <Layout title={art.name}>
   <div>
     <ArrowButton
-      client:load
+      client:only="solidjs"
       text={`${artist.name}의 작품 보러가기`}
       href={`/art/${art.artistId}`}
     />

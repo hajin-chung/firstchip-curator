@@ -22,12 +22,41 @@ const { isAuthed, artist: authData } = await getAuthDataBySessionId(
 
 <Layout title={`${artist.name}`}>
   <div>
-    <ArrowButton client:load text="작품 목록 보러가기" href="/" />
+    <ArrowButton client:load text="홈으로 돌아가기" href="/" />
   </div>
-  <div class="text-xl font-bold">{artist.name}</div>
-	{isAuthed && authData && authData.artistId === artistId && <a href="/mypage/new">작품 추가하기</a>}
-  <img src={artist.picture} class="h-6 w-6" />
-  <div class="flex flex-col gap-2">
-    {arts.map(({ id, name }) => <a href={`/art/${artist.id}/${id}`}>{name}</a>)}
+  <img
+    src={artist.picture}
+    class="h-20 w-20 rounded-full border-2 border-black p-[1px]"
+  />
+  <div class="flex flex-col mx-1 mt-4">
+    <div class="text-2xl font-bold">{artist.name}</div>
+    {
+      isAuthed && authData && authData.artistId === artistId && (
+        <a
+          href="/art/new"
+          class="self-end rounded-full border-[1px] px-2 py-1 border-black hover:bg-black hover:text-white transition"
+        >
+          작품 추가하기
+        </a>
+      )
+    }
+    <p class="text-lg font-bold">작품 목록</p>
+    <div class="flex flex-col gap-1 mt-4 items-start">
+      {
+        arts.map(({ id, name }) => (
+          <a
+            class="flex gap-2 items-center p-1 hover:bg-slate-100 transition rounded-lg"
+            href={`/art/${artist.id}/${id}`}
+          >
+            {name}
+          </a>
+        ))
+      }
+    </div>
+    {
+      arts.length === 0 && (
+        <div class="self-center text-gray-500 mt-10">작품 없음</div>
+      )
+    }
   </div>
 </Layout>

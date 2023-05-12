@@ -1,13 +1,19 @@
 import type { Component } from "solid-js";
 
 type ArrowButtonProps = {
-  href: string;
+  href?: string;
   text: string;
+  isBack?: boolean;
 };
 
-export const ArrowButton: Component<ArrowButtonProps> = ({ href, text }) => {
+export const ArrowButton: Component<ArrowButtonProps> = ({
+  href = "/",
+  text,
+  isBack = false,
+}) => {
   const handleClick = () => {
-    if (window) window.location.href = href;
+    if (isBack && history) history.back();
+    else if (window) window.location.href = href;
   };
 
   return (

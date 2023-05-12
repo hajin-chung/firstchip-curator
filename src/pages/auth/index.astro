@@ -1,11 +1,18 @@
 ---
 import Layout from "@layouts/Layout.astro";
-import {KakaoLoginButton} from "@components/LoginButtons";
-
+import { KakaoLoginButton } from "@components/LoginButtons";
+import { ArrowButton } from "@components/ArrowButton";
 ---
 
 <Layout title="로그인">
-	<h1 class="text-2xl font-bold">로그인</h1>
-	<div class="h-4" />
-	<KakaoLoginButton client:load />
+  <div>
+    <ArrowButton href="/" text="홈으로 돌아가기" client:idle />
+  </div>
+  <h1 class="text-2xl font-bold">로그인</h1>
+  <div class="h-4"></div>
+  <div class="flex justify-center w-full">
+    <div class="max-w-[200px] w-full mx-10">
+      <KakaoLoginButton client:load />
+    </div>
+  </div>
 </Layout>

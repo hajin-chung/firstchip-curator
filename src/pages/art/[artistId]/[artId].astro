@@ -10,6 +10,7 @@ if (typeof artId !== "string" || typeof artistId !== "string") {
 }
 
 const { art, artist, images } = await getArtById(artId, artistId);
+console.log(images);
 
 if (art === undefined || artist === undefined) {
   return Astro.redirect("/404");
@@ -24,17 +25,22 @@ if (art === undefined || artist === undefined) {
       href={`/art/${art.artistId}`}
     />
   </div>
-  {
-    images &&
-      images.map((image) => (
-        <img src={image} class="img drop-shadow-2xl rounded-lg" />
-      ))
-  }
-  <div class="flex flex-col gap-[2px] mx-3 my-5">
+  <div class="w-full max-h-[540px] flex flex-col">
+    {
+      images &&
+        images.map((image) => (
+          <img
+            src={image}
+            class="img drop-shadow-2xl rounded-lg self-center max-h-full"
+          />
+        ))
+    }
+  </div>
+  <div class="flex flex-col gap-[2px] mx-3 my-5 items-start">
     <h2 class="text-2xl font-extrabold">{art.name}</h2>
     <a href={`/art/${art.artistId}`} class="text-xl font-bold mb-5">
       {artist.name}
     </a>
-    <p>{art.description}</p>
+    <p class="whitespace-pre-line">{art.description}</p>
   </div>
 </Layout>

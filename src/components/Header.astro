@@ -1,0 +1,35 @@
+---
+import { getAuthDataBySessionId } from "@lib/server";
+
+const { isAuthed, artist } = await getAuthDataBySessionId(
+  Astro.cookies.get("session").value
+);
+---
+
+<div class="w-full flex justify-end mt-2">
+  {
+    isAuthed && artist ? (
+      <div class="flex gap-4">
+        <a
+          href={`/art/${artist.artistId}`}
+          class="font-bold text-sm hover:bg-slate-100 transition rounded-lg p-1"
+        >
+          마이 페이지
+        </a>
+        <a
+          href="/auth/logout"
+          class="font-bold text-sm hover:bg-slate-100 transition rounded-lg p-1"
+        >
+          로그아웃
+        </a>
+      </div>
+    ) : (
+      <a
+        class="font-bold text-sm hover:bg-slate-100 transition rounded-lg p-1"
+        href="/auth"
+      >
+        로그인
+      </a>
+    )
+  }
+</div>

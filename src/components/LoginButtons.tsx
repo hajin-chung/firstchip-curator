@@ -11,10 +11,10 @@ export const KakaoLoginButton: Component = () => {
 
   return (
     <button
-      class="w-full text-xl font-bold bg-yellow-kakao rounded-lg text-center"
+      class="w-full text-lg font-bold border-yellow-kakao border-4 rounded-lg text-center py-1 hover:bg-yellow-kakao transition"
       onClick={handleClick}
     >
-      카카오 계정으로 시작하기
+      카카오로 시작하기
     </button>
   );
 };

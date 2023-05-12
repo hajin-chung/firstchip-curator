@@ -1,4 +1,5 @@
 ---
+import { ArrowButton } from "@components/ArrowButton";
 import { ArtCreateForm } from "@components/ArtCreateForm";
 import Layout from "@layouts/Layout.astro";
 import { getAuthDataBySessionId } from "@lib/server";
@@ -13,5 +14,12 @@ if (isAuthed !== true || artist === undefined) {
 ---
 
 <Layout title="새 작품 추가하기">
-	<ArtCreateForm client:load />
+  <div>
+    <ArrowButton
+      text="프로필로 돌아가기"
+      href={`/art/${artist.artistId}`}
+      client:idle
+    />
+  </div>
+  <ArtCreateForm client:load />
 </Layout>

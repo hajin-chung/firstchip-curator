@@ -1,22 +1,28 @@
 ---
-import Layout from "../layouts/Layout.astro";
+import LayoutWithHeader from "@layouts/LayoutWithHeader.astro";
 import { getCollection } from "astro:content";
 
 const descriptions = await getCollection("description");
 ---
 
-<Layout title="간단 큐레이터!">
+<LayoutWithHeader title="간단 큐레이터!">
   <main>
-    <div class="h-10"></div>
+    <div class="h-6"></div>
+    <div class="flex w-full justify-center my-4">
+      <p>메인 페이지 구상중...</p>
+    </div>
     <h1 class="text-2xl font-extrabold">작품 목록</h1>
     <div class="flex mt-8 flex-col gap-2 items-start">
       {
         descriptions.map(({ slug, data }) => (
-          <a href={`/description/${slug}`} class="hover:bg-slate-100 transition rounded-lg p-1">
+          <a
+            href={`/description/${slug}`}
+            class="hover:bg-slate-100 transition rounded-lg p-1"
+          >
             {data.title}
           </a>
         ))
       }
     </div>
   </main>
-</Layout>
+</LayoutWithHeader>

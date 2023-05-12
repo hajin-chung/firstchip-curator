@@ -21,7 +21,6 @@ const dbConfig: Config = {
 };
 
 export const conn = connect(dbConfig);
-console.log(JSON.stringify(conn));
 
 const ACCOUNT_ID = import.meta.env.CLOUDFLARE_ACCOUNT_ID;
 const ACCESS_KEY = import.meta.env.R2_ACCESS_KEY;
@@ -36,11 +35,6 @@ const S3 = new S3Client({
     secretAccessKey: SECRET_KEY,
   },
 });
-
-// async function execute<T>(query: string, args: any[] | undefined): Promise<T> {
-// 	const result = await conn.execute(query, args);
-// 	return {} as T;
-// }
 
 export const getArtById = async (artId: string, artistId: string) => {
   const artResult = await conn.execute(

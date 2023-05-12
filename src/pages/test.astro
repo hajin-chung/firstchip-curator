@@ -2,7 +2,13 @@
 import Layout from "@layouts/Layout.astro";
 import { testConn } from "@lib/server";
 
-const queryRes = await testConn();
+let queryRes;
+
+try {
+  queryRes = await testConn();
+} catch (e) {
+  queryRes = e;
+}
 ---
 
 <Layout title="test">

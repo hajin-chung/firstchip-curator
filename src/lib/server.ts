@@ -98,6 +98,7 @@ export const authUser = async ({
   email,
 }: Pick<Artist, "name" | "sub" | "picture" | "email">) => {
   // check sub exist
+	console.log({name, sub, picture, email});
   const checkRes = await conn.execute(
     "SELECT sub, id FROM artist WHERE sub=?",
     [sub]

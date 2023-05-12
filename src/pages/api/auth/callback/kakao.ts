@@ -65,6 +65,6 @@ export const get: APIRoute = async ({ request, redirect }) => {
     });
   } catch (e) {
     console.error(e);
-    return redirect(`/500?message=${JSON.stringify(e)}`, 307);
+    return redirect(`/500?message=${e}`, 307);
   }
 };

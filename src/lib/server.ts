@@ -20,7 +20,7 @@ const dbConfig: Config = {
   },
 };
 
-export const conn = connect(dbConfig);
+const conn = connect(dbConfig);
 
 const ACCOUNT_ID = import.meta.env.CLOUDFLARE_ACCOUNT_ID;
 const ACCESS_KEY = import.meta.env.R2_ACCESS_KEY;
@@ -93,12 +93,10 @@ export const authUser = async ({
   email,
 }: Pick<Artist, "name" | "sub" | "picture" | "email">) => {
   // check sub exist
-	console.log({name, sub, picture, email});
   const checkRes = await conn.execute(
     "SELECT sub, id FROM artist WHERE sub=?",
     [sub]
   );
-	console.log(checkRes);
   let artistId: string;
 
   if (checkRes.rows.length === 0) {
@@ -185,9 +183,3 @@ export const createImage = async (id: string, artId: string) => {
   );
   // TODO: handle query res
 };
-
-export const testConn = async () => {
-	const res = await conn.execute("SELECT * FROM artist;");
-
-	return res;
-}

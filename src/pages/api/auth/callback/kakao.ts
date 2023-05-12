@@ -7,7 +7,6 @@ export const get: APIRoute = async ({ request, redirect }) => {
   try {
     const url = new URL(request.url);
     const code = url.searchParams.get("code");
-		console.log(`code: ${code}`);
     if (code === null) {
       throw "code is null";
     }
@@ -65,7 +64,6 @@ export const get: APIRoute = async ({ request, redirect }) => {
       },
     });
   } catch (e) {
-		console.log(e);
     return redirect(`/500?message=${JSON.stringify(e)}`, 307);
   }
 };

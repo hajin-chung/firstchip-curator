@@ -86,7 +86,6 @@ export const ArtCreateForm: Component = () => {
               type="file"
               id="imageInput"
               class="hidden"
-              onChange={(evt) => console.log(evt)}
               onInput={handleFileInput}
               ref={imageInputRef}
             />

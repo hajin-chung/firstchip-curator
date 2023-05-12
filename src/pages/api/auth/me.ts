@@ -8,7 +8,6 @@ export const get: APIRoute = async ({ request, cookies }) => {
     const artist = await getAuthDataBySessionId(sessionId);
     return new Response(JSON.stringify(artist));
   } catch (e) {
-    console.log(e);
     return new Response(JSON.stringify({ isAuthed: false }));
   }
 };

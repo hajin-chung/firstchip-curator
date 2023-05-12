@@ -1,20 +1,8 @@
 ---
 import Layout from "@layouts/Layout.astro";
-import { conn, testConn } from "@lib/server";
-
-let queryRes;
-
-try {
-  queryRes = await testConn();
-} catch (e) {
-  queryRes = e;
-}
-
-console.log(conn);
-console.log(import.meta.env);
 ---
 
 <Layout title="test">
-  <p>{JSON.stringify(queryRes)}</p>
-  <p>{JSON.stringify(conn)}</p>
+	<p>layout & ui testing page</p>
+	<p>채용 기둘</p>
 </Layout>

@@ -102,6 +102,7 @@ export const authUser = async ({
     "SELECT sub, id FROM artist WHERE sub=?",
     [sub]
   );
+	console.log(checkRes);
   let artistId: string;
 
   if (checkRes.rows.length === 0) {

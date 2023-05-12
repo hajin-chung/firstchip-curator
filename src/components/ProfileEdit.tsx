@@ -28,7 +28,7 @@ export const ProfileEdit: Component<Props> = ({ artist, arts }) => {
   };
 
   const handleSubmit = async () => {
-    const body= {
+    const body = {
       name: name(),
       didPictureUpdate: picture() !== artist.picture,
     };
@@ -58,7 +58,7 @@ export const ProfileEdit: Component<Props> = ({ artist, arts }) => {
 
   return (
     <div class="flex flex-col items-start">
-      <ArrowButton text="프로필로 돌아가기" />
+      <ArrowButton text="프로필로 돌아가기" href={`/art/${artist.id}`} />
       <div class="flex gap-2 items-center">
         <p>이름</p>
         <input

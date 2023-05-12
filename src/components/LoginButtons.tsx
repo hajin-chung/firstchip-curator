@@ -11,7 +11,7 @@ export const KakaoLoginButton: Component = () => {
 
   return (
     <button
-      class="w-full text-lg font-bold border-yellow-kakao border-4 rounded-lg text-center py-1 hover:bg-yellow-kakao transition"
+      class="w-full text-lg font-bold border-yellow-kakao border-2 rounded-lg text-center py-1 hover:bg-yellow-kakao transition"
       onClick={handleClick}
     >
       카카오로 시작하기

@@ -1,6 +1,6 @@
 ---
 import Layout from "@layouts/Layout.astro";
-import { testConn } from "@lib/server";
+import { conn, testConn } from "@lib/server";
 
 let queryRes;
 
@@ -13,4 +13,5 @@ try {
 
 <Layout title="test">
   <p>{JSON.stringify(queryRes)}</p>
+  <p>{JSON.stringify(conn)}</p>
 </Layout>

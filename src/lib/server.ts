@@ -20,7 +20,7 @@ const dbConfig: Config = {
   },
 };
 
-const conn = connect(dbConfig);
+export const conn = connect(dbConfig);
 
 const ACCOUNT_ID = import.meta.env.CLOUDFLARE_ACCOUNT_ID;
 const ACCESS_KEY = import.meta.env.R2_ACCESS_KEY;

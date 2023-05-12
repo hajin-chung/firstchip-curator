@@ -7,6 +7,7 @@ export const get: APIRoute = async ({ request, redirect }) => {
   try {
     const url = new URL(request.url);
     const code = url.searchParams.get("code");
+		console.log(`code: ${code}`);
     if (code === null) {
       throw "code is null";
     }

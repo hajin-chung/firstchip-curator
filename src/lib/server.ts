@@ -1,6 +1,6 @@
 // server functions mainly fetching data from db
 
-import { connect } from "@planetscale/database";
+import { Config, connect } from "@planetscale/database";
 import { SESSION_DURATION, type Art, type Artist, type Image } from "./type";
 import { createId } from "@lib/utils";
 import {
@@ -10,10 +10,14 @@ import {
 } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
-const dbConfig = {
+const dbConfig: Config = {
   host: import.meta.env.DATABASE_HOST,
   username: import.meta.env.DATABASE_USERNAME,
   password: import.meta.env.DATABASE_PASSWORD,
+  fetch: (url, init) => {
+    delete (init as any)["cache"]; // Remove cache header
+    return fetch(url, init);
+  },
 };
 
 const conn = connect(dbConfig);

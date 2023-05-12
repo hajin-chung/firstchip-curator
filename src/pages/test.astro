@@ -1,0 +1,10 @@
+---
+import Layout from "@layouts/Layout.astro";
+import { testConn } from "@lib/server";
+
+const queryRes = await testConn();
+---
+
+<Layout title="test">
+  <p>{JSON.stringify(queryRes)}</p>
+</Layout>

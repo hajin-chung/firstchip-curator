@@ -190,3 +190,9 @@ export const createImage = async (id: string, artId: string) => {
   );
   // TODO: handle query res
 };
+
+export const testConn = async () => {
+	const res = await conn.execute("SELECT * FROM artist;");
+
+	return res;
+}

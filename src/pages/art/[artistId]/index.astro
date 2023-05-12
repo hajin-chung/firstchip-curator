@@ -32,15 +32,23 @@ const { isAuthed, artist: authData } = await getAuthDataBySessionId(
     <div class="text-2xl font-bold">{artist.name}</div>
     {
       isAuthed && authData && authData.artistId === artistId && (
-        <a
-          href="/art/new"
-          class="self-end rounded-full border-[1px] px-2 py-1 border-black hover:bg-black hover:text-white transition"
-        >
-          작품 추가하기
-        </a>
+        <div class="flex gap-4 self-end ">
+          <a
+            href="/art/new"
+            class="rounded-full border-[1px] px-2 py-1 border-black hover:bg-black hover:text-white transition"
+          >
+            작품 추가하기
+          </a>
+          <a
+            href="/me/profile"
+            class="rounded-full border-[1px] px-2 py-1 border-black hover:bg-black hover:text-white transition"
+          >
+            프로필 수정하기
+          </a>
+        </div>
       )
     }
-    <p class="text-lg font-bold">작품 목록</p>
+    <p class="text-lg font-bold mt-10">작품 목록</p>
     <div class="flex flex-col gap-1 mt-4 items-start">
       {
         arts.map(({ id, name }) => (

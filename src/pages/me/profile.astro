@@ -1,0 +1,21 @@
+---
+import { ProfileEdit } from "@components/ProfileEdit";
+import Layout from "@layouts/Layout.astro";
+import { getAuthDataBySessionId,  getArtistById } from "@lib/server";
+
+const { isAuthed, artist:authData } = await getAuthDataBySessionId(
+  Astro.cookies.get("session").value
+);
+
+if (isAuthed !== true || authData === undefined) {
+  return Astro.redirect("/auth");
+}
+
+const artistId = authData.artistId;
+
+const { artist, arts } = await getArtistById(artistId);
+---
+
+<Layout title="프로필 수정하기">
+  <ProfileEdit client:load artist={artist} arts={arts} />
+</Layout>

@@ -176,10 +176,44 @@ export const createArt = async (
   return { signedUrls, artId };
 };
 
+export const createGetImageUrl = async (id: string) => {
+  const signedUrl = await getSignedUrl(
+    S3,
+    new GetObjectCommand({ Bucket: BUCKET_NAME, Key: id }),
+    { expiresIn: 3600 }
+  );
+  return signedUrl;
+};
+
+export const createPutImageUrl = async (id: string) => {
+  const signedUrl = await getSignedUrl(
+    S3,
+    new PutObjectCommand({ Bucket: BUCKET_NAME, Key: id }),
+    { expiresIn: 3600 }
+  );
+  return signedUrl;
+};
+
 export const createImage = async (id: string, artId: string) => {
   const imageRes = await conn.execute(
     "INSERT INTO image (id, artId, url) VALUES (?, ?, ?)",
     [id, artId, ""]
   );
   // TODO: handle query res
+};
+
+export const updateName = async (artistId: string, newName: string) => {
+  const res = await conn.execute("UPDATE artist SET name=? WHERE id=?", [
+    newName,
+    artistId,
+  ]);
+  // TODO: handle res
+};
+
+export const updatePicture = async (artistId: string) => {
+  const res = await conn.execute("UPDATE artist SET picture=? WHERE id=?", [
+    `/image?id=${artistId}`,
+    artistId,
+  ]);
+  // TODO: handle res
 };

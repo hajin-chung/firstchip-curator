@@ -15,7 +15,6 @@ export const ArtCreateForm: Component = () => {
     currentTarget: HTMLInputElement;
     target: DOMElement;
   }) => {
-		console.log(evt);
     if (!evt.currentTarget.files) return;
     if (!imageInputRef) return;
 
@@ -68,11 +67,6 @@ export const ArtCreateForm: Component = () => {
       window.location.href = `/art/${artistId}/${artId}`;
     }
   };
-
-	createEffect(() => {
-		console.log(images());
-		console.log(selected());
-	})
 
   return (
     <div class="flex flex-col w-full">

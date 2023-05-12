@@ -10,7 +10,6 @@ if (typeof artId !== "string" || typeof artistId !== "string") {
 }
 
 const { art, artist, images } = await getArtById(artId, artistId);
-console.log(images);
 
 if (art === undefined || artist === undefined) {
   return Astro.redirect("/404");

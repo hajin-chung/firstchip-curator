@@ -7,7 +7,7 @@ import Layout from "./Layout.astro";
 
 <Layout title={frontmatter.title}>
   <div>
-    <ArrowButton client:load text="작품 목록 보러가기" href="/" />
+    <ArrowButton text="작품 목록 보러가기" href="/" client:load />
   </div>
   {
     frontmatter.images &&

@@ -10,21 +10,21 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/cloudflare": "^6.2.2",
-    "@astrojs/solid-js": "^2.1.0",
-    "@astrojs/tailwind": "^3.1.1",
-    "@aws-sdk/client-s3": "^3.329.0",
-    "@aws-sdk/s3-request-presigner": "^3.329.0",
+    "@astrojs/cloudflare": "^6.2.4",
+    "@astrojs/solid-js": "^2.1.1",
+    "@astrojs/tailwind": "^3.1.2",
+    "@aws-sdk/client-s3": "^3.332.0",
+    "@aws-sdk/s3-request-presigner": "^3.332.0",
     "@paralleldrive/cuid2": "^2.2.0",
     "@planetscale/database": "^1.7.0",
-    "astro": "^2.3.1",
+    "astro": "^2.4.5",
     "dotenv": "^16.0.3",
     "jwt-decode": "^3.1.2",
-    "solid-js": "^1.4.3",
-    "tailwindcss": "^3.0.24"
+    "solid-js": "^1.7.5",
+    "tailwindcss": "^3.3.2"
   },
   "devDependencies": {
-    "@astrojs/partytown": "^1.2.0",
+    "@astrojs/partytown": "^1.2.1",
     "wrangler": "^2.20.0"
   }
 }

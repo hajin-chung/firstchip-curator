@@ -1,15 +1,17 @@
-import { createSignal, type Component } from "solid-js";
+import { createSignal, type Component, JSX } from "solid-js";
+import type { DOMElement } from "solid-js/jsx-runtime";
 
 export const ArtCreateForm: Component = () => {
   const [name, setName] = createSignal("");
   const [description, setDescription] = createSignal("");
   const [images, setImages] = createSignal<File[]>([]);
   const [selected, setSelected] = createSignal("");
-  let imageInputRef: HTMLInputElement;
+  let imageInputRef!: HTMLInputElement;
 
-  const handleFileInput = (
-    evt: Event & { currentTarget: HTMLInputElement; target: HTMLInputElement }
-  ) => {
+  const handleFileInput = (evt: {
+    currentTarget: HTMLInputElement;
+    target: DOMElement;
+  }) => {
     if (!evt.currentTarget.files) return;
     if (!imageInputRef) return;
 
@@ -17,12 +19,9 @@ export const ArtCreateForm: Component = () => {
     if (file) {
       setImages((i) => [...i, file]);
     }
-
-    imageInputRef.value = "";
   };
 
   const handleSubmit = async () => {
-		console.log("hi");
     const createArtBody = {
       name: name(),
       description: description(),
@@ -37,11 +36,10 @@ export const ArtCreateForm: Component = () => {
     const { error, signedUrls, artId, artistId } = (await res.json()) as {
       error: boolean;
       signedUrls: { imageId: string; signedUrl: string }[];
-			artId: string;
-			artistId: string;
+      artId: string;
+      artistId: string;
     };
-		// TODO: handle error
-		console.log({error, signedUrls});
+    // TODO: handle error
 
     await Promise.all(
       signedUrls.map(async ({ imageId, signedUrl }, idx) => {
@@ -50,13 +48,13 @@ export const ArtCreateForm: Component = () => {
           body: images()[idx],
           mode: "cors",
         });
-				// handle res
+        // handle res
       })
     );
 
-		if (window) {
-			window.location.href = `/art/${artistId}/${artId}`;
-		}
+    if (window) {
+      window.location.href = `/art/${artistId}/${artId}`;
+    }
   };
 
   return (
@@ -88,8 +86,9 @@ export const ArtCreateForm: Component = () => {
               type="file"
               id="imageInput"
               class="hidden"
-              onChange={handleFileInput}
-              ref={imageInputRef!}
+              onChange={(evt) => console.log(evt)}
+              onInput={handleFileInput}
+              ref={imageInputRef}
             />
           </div>
           {images().map((image) => (

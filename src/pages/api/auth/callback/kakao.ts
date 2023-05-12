@@ -8,7 +8,7 @@ export const get: APIRoute = async ({ request, redirect }) => {
     const url = new URL(request.url);
     const code = url.searchParams.get("code");
     if (code === null) {
-			throw "code is null"
+      throw "code is null";
     }
 
     const tokenBody = {
@@ -65,6 +65,6 @@ export const get: APIRoute = async ({ request, redirect }) => {
     });
   } catch (e) {
     console.error(e);
-    return redirect("/500", 307);
+    return redirect(`/500?message=${JSON.stringify(e)}`, 307);
   }
 };

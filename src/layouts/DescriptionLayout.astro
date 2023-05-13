@@ -1,13 +1,13 @@
 ---
 const { frontmatter } = Astro.props;
-import { ArrowButton } from "@components/ArrowButton";
+import ArrowButton from "@components/ArrowButton.astro";
 import { Survey } from "../components/Survey";
 import Layout from "./Layout.astro";
 ---
 
 <Layout title={frontmatter.title}>
   <div>
-    <ArrowButton text="작품 목록 보러가기" href="/" client:only="solidjs" />
+    <ArrowButton text="작품 목록 보러가기" href="/" />
   </div>
   {
     frontmatter.images &&

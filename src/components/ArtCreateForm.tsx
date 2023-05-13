@@ -3,12 +3,13 @@ import { createStore } from "solid-js/store";
 import type { DOMElement } from "solid-js/jsx-runtime";
 import { Trash } from "./icons/Trash";
 import { Plus } from "./icons/Plus";
+import { ChevronLeft, ChevronRight } from "./icons/Chevron";
 
 export const ArtCreateForm: Component = () => {
   const [name, setName] = createSignal("");
   const [description, setDescription] = createSignal("");
-  const [images, setImages] = createSignal<File[]>([]);
-  const [selected, setSelected] = createSignal<File | undefined>();
+  const [images, setImages] = createStore<File[]>([]);
+  const [selected, setSelected] = createSignal<number | undefined>();
   let imageInputRef!: HTMLInputElement;
 
   const handleFileInput = (evt: {
@@ -23,20 +24,42 @@ export const ArtCreateForm: Component = () => {
       setImages((i) => [...i, file]);
     }
 
-		imageInputRef.files = null;
-		imageInputRef.value = "";
+    imageInputRef.value = "";
+    setSelected(images.length - 1);
   };
 
   const handleRemove = () => {
-    setImages((images) => images.filter((img) => img !== selected()));
-    setSelected(undefined);
+    const idx = selected();
+    if (idx === undefined) return;
+
+    setSelected(() => {
+			if (images.length === 1) return undefined;
+      if (idx === 0) return 0;
+      else return idx - 1;
+    });
+
+    setImages((oldImages) => {
+      const newImages = [...oldImages];
+      newImages.splice(idx, 1);
+      return newImages;
+    });
+  };
+
+  const handleLeft = () => {
+    const idx = selected();
+    if (idx !== undefined && idx > 0) setSelected(idx - 1);
+  };
+
+  const handleRight = () => {
+    const idx = selected();
+    if (idx !== undefined && idx < images.length - 1) setSelected(idx + 1);
   };
 
   const handleSubmit = async () => {
     const createArtBody = {
       name: name(),
       description: description(),
-      imageCount: images().length,
+      imageCount: images.length,
     };
 
     const res = await fetch("/api/art", {
@@ -56,7 +79,7 @@ export const ArtCreateForm: Component = () => {
       signedUrls.map(async ({ imageId, signedUrl }, idx) => {
         const res = await fetch(signedUrl, {
           method: "PUT",
-          body: images()[idx],
+          body: images[idx],
           mode: "cors",
         });
         // handle res
@@ -70,49 +93,88 @@ export const ArtCreateForm: Component = () => {
 
   return (
     <div class="flex flex-col w-full">
-      <div class="flex flex-row gap-2 w-full bg-gray-100 rounded-lg h-[400px]">
-        <div class="w-full flex h-full items-center justify-center">
-          <img
-            src={selected() && URL.createObjectURL(selected()!)}
-            class="h-full"
+      <div class="flex flex-col gap-4 items-center">
+        <div class="px-10 w-full h-[400px] flex flex-row overflow-visible">
+          <input
+            type="file"
+            id="imageInput"
+            class="hidden"
+            onInput={handleFileInput}
+            ref={imageInputRef}
           />
-        </div>
-        <div class="relative p-2 flex flex-col gap-2">
-          <div>
+          {selected() === undefined && (
             <label
-              class="w-8 h-8 rounded-lg border-[1px] p-1 text-xl border-black flex justify-center items-center cursor-pointer hover:bg-black hover:text-white"
+              class="bg-gray-100 w-full h-full rounded-lg shadow-lg flex justify-center items-center group border-black transition cursor-pointer"
+              for="imageInput"
+            >
+              <label
+                class="text-xl flex justify-center items-center cursor-pointer text-gray-300 group-hover:text-gray-700 border-black w-20 h-20 transition"
+                for="imageInput"
+              >
+                <Plus />
+              </label>
+            </label>
+          )}
+          {selected() !== undefined && (
+            <img
+              src={URL.createObjectURL(images[selected()!])}
+              class="w-full h-full rounded-lg shadow-lg"
+            />
+          )}
+        </div>
+        <div class="flex w-4/5 justify-between">
+          <div class="flex items-center">
+            <button
+              class="h-8 w-8 p-1 border-[1px] rounded-lg"
+              classList={{
+                "text-red-400 border-red-400 hover:bg-red-400 hover:text-white":
+                  selected() !== undefined,
+                "text-gray-400 border-gray-400": selected() === undefined,
+              }}
+              onClick={handleRemove}
+            >
+              <Trash />
+            </button>
+            <div class="w-4" />
+            <label
+              class="h-8 w-8 p-1 border-[1px] rounded-lg                text-black border-black hover:bg-black hover:text-white"
               for="imageInput"
             >
               <Plus />
             </label>
-            <input
-              type="file"
-              id="imageInput"
-              class="hidden"
-              onInput={handleFileInput}
-              ref={imageInputRef}
-            />
           </div>
-          {images().map((image) => (
-            <img
-              src={URL.createObjectURL(image)}
-              class="w-8 h-8 rounded-lg cursor-pointer"
-              onClick={() => setSelected(() => image)}
-            />
-          ))}
-          {selected() && (
-            <div class="absolute bottom-2 right-2">
-              <button
-                class="w-8 h-8 p-1 rounded-lg border-[1px] text-xl border-red-400 text-red-400 flex justify-center items-center cursor-pointer hover:bg-red-400 hover:border-red-400 hover:text-white"
-                onClick={handleRemove}
-              >
-                <Trash />
-              </button>
+
+          <div class="flex items-center">
+            <button
+              class={`h-8 w-8 p-1 border-[1px] rounded-lg ${
+                selected() !== undefined && selected()! > 0
+                  ? "border-black hover:bg-black hover:text-white"
+                  : "text-gray-400 border-gray-400"
+              }`}
+              onClick={handleLeft}
+            >
+              <ChevronLeft />
+            </button>
+            <div class="mx-4">
+              {selected() !== undefined && (
+                <p>
+                  {selected()! + 1}/{images.length}
+                </p>
+              )}
             </div>
-          )}
+            <button
+              class={`h-8 w-8 p-1 border-[1px] rounded-lg ${
+                selected() !== undefined && selected()! < images.length - 1
+                  ? "border-black hover:bg-black hover:text-white"
+                  : "text-gray-400 border-gray-400"
+              }`}
+              onClick={handleRight}
+            >
+              <ChevronRight />
+            </button>
+          </div>
         </div>
       </div>
-
       <div class="h-6" />
       <div class="flex gap-2 w-full items-center">
         <p class="font-xl font-bold">제목</p>
@@ -123,7 +185,7 @@ export const ArtCreateForm: Component = () => {
         />
       </div>
       <div class="h-2" />
-      <div class="flex flex-col gap-2 w-full">
+      <div class="flex flex-col gap-1 w-full">
         <p class="font-lg font-bold">설명</p>
         <textarea
           value={description()}

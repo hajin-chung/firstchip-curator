@@ -1,0 +1,34 @@
+---
+import ArrowButton from "@components/ArrowButton.astro";
+import Layout from "@layouts/Layout.astro";
+import { getAuthDataBySessionId, getArtById } from "@lib/server";
+import { ArtEditForm } from "@components/ArtEditForm";
+
+const { isAuthed, artist: authData } = await getAuthDataBySessionId(
+  Astro.cookies.get("session").value
+);
+
+if (isAuthed !== true || authData === undefined) {
+  return Astro.redirect("/auth");
+}
+
+const { artId } = Astro.params;
+
+if (typeof artId !== "string" || typeof authData.artistId !== "string") {
+  return Astro.redirect("/500");
+}
+
+const { art, artist, images } = await getArtById(artId, authData.artistId);
+---
+
+<Layout title="작품 수정하기">
+  <div>
+    <ArrowButton text="프로필로 돌아가기" href={`/art/${authData.artistId}`} />
+  </div>
+  <ArtEditForm
+    name={art.name}
+    description={art.description}
+    images={images}
+    client:load
+  />
+</Layout>

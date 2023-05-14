@@ -1,7 +1,9 @@
 ---
 import ArrowButton from "@components/ArrowButton.astro";
+import { Pencil } from "@components/icons/Pencil";
+import { Trash } from "@components/icons/Trash";
 import Layout from "@layouts/Layout.astro";
-import { getArtById } from "@lib/server";
+import { getArtById, getAuthDataBySessionId } from "@lib/server";
 
 const { artistId, artId } = Astro.params;
 
@@ -14,6 +16,10 @@ const { art, artist, images } = await getArtById(artId, artistId);
 if (art === undefined || artist === undefined) {
   return Astro.redirect("/404");
 }
+
+const { isAuthed, artist: authData } = await getAuthDataBySessionId(
+  Astro.cookies.get("session").value
+);
 ---
 
 <Layout title={art.name}>
@@ -41,4 +47,22 @@ if (art === undefined || artist === undefined) {
     </a>
     <p class="whitespace-pre-line">{art.description}</p>
   </div>
+  {
+    isAuthed && authData && (
+      <div class="flex gap-4 self-end">
+        <a
+          href={`/me/art/${artId}`}
+          class="h-8 w-8 p-1 border-[1px] rounded-lg text-red-400 border-red-400 hover:bg-red-400 hover:text-white"
+        >
+          <Trash />
+        </a>
+        <a
+          href={`/me/art/${artId}`}
+          class="h-8 w-8 p-1 border-[1px] rounded-lg text-black border-black hover:bg-black hover:text-white"
+        >
+          <Pencil />
+        </a>
+      </div>
+    )
+  }
 </Layout>

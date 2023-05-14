@@ -15,11 +15,7 @@ if (isAuthed !== true || artist === undefined) {
 
 <Layout title="새 작품 추가하기">
   <div>
-    <ArrowButton
-      text="프로필로 돌아가기"
-      href={`/art/${artist.artistId}`}
-      client:idle
-    />
+    <ArrowButton text="프로필로 돌아가기" href={`/art/${artist.artistId}`} />
   </div>
   <ArtCreateForm client:load />
 </Layout>

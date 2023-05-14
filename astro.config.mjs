@@ -19,7 +19,11 @@ const envNames = [
 
 // https://astro.build/config
 export default defineConfig({
-	integrations: [tailwind(), solidJs(), partytown({
+	integrations: [tailwind({
+		config: {
+			applyBaseStyles: false
+		}
+	}), solidJs(), partytown({
 		config: {
 			forward: ["dataLayer.push"],
 		}

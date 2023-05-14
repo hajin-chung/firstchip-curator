@@ -1,4 +1,4 @@
-import { createSignal, type Component, createEffect } from "solid-js";
+import { createSignal, type Component } from "solid-js";
 import { createStore } from "solid-js/store";
 import type { DOMElement } from "solid-js/jsx-runtime";
 import { Trash } from "./icons/Trash";
@@ -33,7 +33,7 @@ export const ArtCreateForm: Component = () => {
     if (idx === undefined) return;
 
     setSelected(() => {
-			if (images.length === 1) return undefined;
+      if (images.length === 1) return undefined;
       if (idx === 0) return 0;
       else return idx - 1;
     });
@@ -127,9 +127,8 @@ export const ArtCreateForm: Component = () => {
             <button
               class="h-8 w-8 p-1 border-[1px] rounded-lg"
               classList={{
-                "text-red-400 border-red-400 hover:bg-red-400 hover:text-white":
-                  selected() !== undefined,
-                "text-gray-400 border-gray-400": selected() === undefined,
+                "btn-red": selected() !== undefined,
+                "btn-disabled": selected() === undefined,
               }}
               onClick={handleRemove}
             >
@@ -137,7 +136,7 @@ export const ArtCreateForm: Component = () => {
             </button>
             <div class="w-4" />
             <label
-              class="h-8 w-8 p-1 border-[1px] rounded-lg                text-black border-black hover:bg-black hover:text-white"
+              class="h-8 w-8 p-1 border-[1px] rounded-lg btn"
               for="imageInput"
             >
               <Plus />
@@ -148,8 +147,8 @@ export const ArtCreateForm: Component = () => {
             <button
               class={`h-8 w-8 p-1 border-[1px] rounded-lg ${
                 selected() !== undefined && selected()! > 0
-                  ? "border-black hover:bg-black hover:text-white"
-                  : "text-gray-400 border-gray-400"
+                  ? "btn"
+                  : "btn-disabled"
               }`}
               onClick={handleLeft}
             >
@@ -165,8 +164,8 @@ export const ArtCreateForm: Component = () => {
             <button
               class={`h-8 w-8 p-1 border-[1px] rounded-lg ${
                 selected() !== undefined && selected()! < images.length - 1
-                  ? "border-black hover:bg-black hover:text-white"
-                  : "text-gray-400 border-gray-400"
+                  ? "btn"
+                  : "btn-disabled"
               }`}
               onClick={handleRight}
             >
@@ -195,7 +194,7 @@ export const ArtCreateForm: Component = () => {
       </div>
       <div class="h-4" />
       <button
-        class="self-end rounded-full border-[1px] px-2 py-1 border-black hover:bg-black hover:text-white transition"
+        class="self-end rounded-full border-[1px] px-2 py-1 btn"
         type="submit"
         onClick={handleSubmit}
       >

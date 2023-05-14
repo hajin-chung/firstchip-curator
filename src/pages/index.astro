@@ -17,7 +17,7 @@ const descriptions = await getCollection("description");
         descriptions.map(({ slug, data }) => (
           <a
             href={`/description/${slug}`}
-            class="hover:bg-slate-100 transition rounded-lg p-1"
+            class="hover-bg p-1"
           >
             {data.title}
           </a>

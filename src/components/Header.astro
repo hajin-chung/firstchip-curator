@@ -12,14 +12,11 @@ const { isAuthed, artist } = await getAuthDataBySessionId(
       <div class="flex gap-4">
         <a
           href={`/art/${artist.artistId}`}
-          class="font-bold text-sm hover:bg-slate-100 transition rounded-lg p-1"
+          class="font-bold text-sm hover-bg p-1"
         >
           마이 페이지
         </a>
-        <a
-          href="/auth/logout"
-          class="font-bold text-sm hover:bg-slate-100 transition rounded-lg p-1"
-        >
+        <a href="/auth/logout" class="font-bold text-sm hover-bg p-1">
           로그아웃
         </a>
       </div>

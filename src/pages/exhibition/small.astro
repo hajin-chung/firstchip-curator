@@ -1,0 +1,33 @@
+---
+import LayoutWithHeader from "@layouts/LayoutWithHeader.astro";
+import { getCollection } from "astro:content";
+
+const descriptions = await getCollection("small");
+---
+
+<LayoutWithHeader title="간단 큐레이터!">
+  <main>
+    <div class="h-6"></div>
+    <div class="flex gap-8 items-end">
+      <a
+        class="text-2xl font-extrabold hover:cursor-pointer"
+        href="/exhibition/small">간단 전시회</a
+      >
+      <a
+        class="text-xl text-gray-400 font-extrabold hover:cursor-pointer"
+        href="/exhibition/club"
+      >
+        그리미주아 특별 전시회
+      </a>
+    </div>
+    <div class="flex mt-8 flex-col gap-2 items-start">
+      {
+        descriptions.map(({ slug, data }) => (
+          <a href={`/description/${slug}`} class="hover-bg p-1">
+            {data.title}
+          </a>
+        ))
+      }
+    </div>
+  </main>
+</LayoutWithHeader>

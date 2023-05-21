@@ -10,4 +10,6 @@ const descriptionCollection = defineCollection({
 
 export const collections = {
   description: descriptionCollection,
+	small: descriptionCollection,
+	club: descriptionCollection,
 };

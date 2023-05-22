@@ -1,9 +1,10 @@
 export type Artist = {
   id: string;
   name: string;
-	email: string;
-	sub: string;
+  email: string;
+  sub: string;
   picture: string;
+  description: string;
 };
 
 export type Art = {

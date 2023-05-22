@@ -1,8 +1,8 @@
 import {
   createPutImageUrl,
   getAuthDataBySessionId,
-  updateName,
-	updatePicture,
+  updatePicture,
+  updateProfile,
 } from "@lib/server";
 import type { APIRoute } from "astro";
 
@@ -21,19 +21,22 @@ export const post: APIRoute = async ({ cookies, request }) => {
   }
 
   try {
-    const { name, didPictureUpdate } = (await request.json()) as {
-      name: string | undefined;
+    const { name, description, didPictureUpdate } = (await request.json()) as {
+      name: string;
+      description: string;
       didPictureUpdate: boolean | undefined;
     };
 
     let signedUrl;
-    if (name) await updateName(authData.artistId, name);
+    updateProfile(authData.artistId, name, description);
     if (didPictureUpdate) {
-			await updatePicture(authData.artistId);
+      await updatePicture(authData.artistId);
       signedUrl = await createPutImageUrl(authData.artistId);
     }
 
-    return new Response(JSON.stringify({ error: false, signedUrl }));
+    return new Response(JSON.stringify({ error: false, signedUrl }), {
+      status: 200,
+    });
   } catch (e) {
     return new Response(
       JSON.stringify({ error: true, message: JSON.stringify(e) }),

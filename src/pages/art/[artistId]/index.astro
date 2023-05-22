@@ -30,6 +30,7 @@ const { isAuthed, artist: authData } = await getAuthDataBySessionId(
   />
   <div class="flex flex-col mx-1 mt-4 w-full">
     <div class="text-2xl font-bold">{artist.name}</div>
+    <p class="whitespace-pre-line">{artist.description}</p>
     {
       isAuthed && authData && authData.artistId === artistId && (
         <div class="flex gap-4 justify-end w-full">

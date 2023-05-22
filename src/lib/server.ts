@@ -69,7 +69,7 @@ export const getArtById = async (artId: string, artistId: string) => {
 
 export const getArtistById = async (artistId: string) => {
   const artistResult = await conn.execute(
-    "SELECT id, name, picture FROM artist WHERE id=?",
+    "SELECT id, name, picture, description FROM artist WHERE id=?",
     [artistId]
   );
   const artResult = await conn.execute(
@@ -202,12 +202,15 @@ export const createImage = async (id: string, artId: string) => {
   // TODO: handle query res
 };
 
-export const updateName = async (artistId: string, newName: string) => {
-  const res = await conn.execute("UPDATE artist SET name=? WHERE id=?", [
-    newName,
-    artistId,
-  ]);
-  // TODO: handle res
+export const updateProfile = async (
+  artistId: string,
+  name: string,
+  description: string
+) => {
+  const res = await conn.execute(
+    "UPDATE artist SET description=?, name=? WHERE id=?",
+    [description, name, artistId]
+  );
 };
 
 export const updatePicture = async (artistId: string) => {

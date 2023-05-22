@@ -1,5 +1,6 @@
 ---
 import ArrowButton from "@components/ArrowButton.astro";
+import { DeleteArtButton } from "@components/DeleteArtButton";
 import { Pencil } from "@components/icons/Pencil";
 import { Trash } from "@components/icons/Trash";
 import Layout from "@layouts/Layout.astro";
@@ -50,18 +51,7 @@ const { isAuthed, artist: authData } = await getAuthDataBySessionId(
   {
     isAuthed && authData && (
       <div class="flex gap-4 self-end">
-        <a
-          href={`/me/art/${artId}`}
-          class="h-8 w-8 p-1 border-[1px] rounded-lg btn-red"
-        >
-          <Trash />
-        </a>
-        <a
-          href={`/me/art/${artId}`}
-          class="h-8 w-8 p-1 border-[1px] rounded-lg btn"
-        >
-          <Pencil />
-        </a>
+        <DeleteArtButton artId={artId} client:load />
       </div>
     )
   }

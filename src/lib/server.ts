@@ -176,6 +176,44 @@ export const createArt = async (
   return { signedUrls, artId };
 };
 
+export const updateArt = async (
+  artId: string,
+  name: string,
+  description: string,
+  imageCount: number
+) => {
+  const createArtRes = await conn.execute(
+    "UPDATE art SET name=?, description=? WHERE id=?;",
+    [name, description, artId]
+  );
+
+  // TODO: check query success
+
+  // generate imageCount image upload links
+  const signedUrls = await Promise.all(
+    [...Array(imageCount).keys()].map(async () => {
+      const imageId = createId();
+      const signedUrl = await getSignedUrl(
+        S3,
+        new PutObjectCommand({ Bucket: BUCKET_NAME, Key: imageId }),
+        { expiresIn: 3600 }
+      );
+      return { imageId, signedUrl };
+    })
+  );
+
+  await Promise.all(
+    signedUrls.map(({ imageId }) => createImage(imageId, artId))
+  );
+
+  return { signedUrls, artId };
+};
+
+export const deleteArt = async (artId: string) => {
+  const res = await conn.execute("DELETE FROM art WHERE id=?", [artId]);
+  return res;
+};
+
 export const createGetImageUrl = async (id: string) => {
   const signedUrl = await getSignedUrl(
     S3,

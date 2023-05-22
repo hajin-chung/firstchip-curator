@@ -89,7 +89,7 @@ export const ArtEditForm: Component<Props> = ({
     };
 
     const res = await fetch("/api/art", {
-      method: "POST",
+      method: "PUT",
       body: JSON.stringify(createArtBody),
     });
 

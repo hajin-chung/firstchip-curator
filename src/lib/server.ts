@@ -65,12 +65,7 @@ export const getArtById = async (artId: string, artistId: string) => {
   const art = artResult.rows[0] as Art;
   const artist = artistResult.rows[0] as Artist;
   const images = imagesResult.rows as Image[];
-
-  const imageUrls = await Promise.all(
-    images.map(({ id }) => {
-      return createSignedUrl("get", id);
-    })
-  );
+  const imageUrls = images.map(({ id }) => `/image?id=${id}`);
 
   return { art, artist, images: imageUrls };
 };
@@ -168,7 +163,7 @@ export const createArt = async (
   const signedUrls = await Promise.all(
     [...Array(imageCount).keys()].map(async () => {
       const imageId = createId();
-      const signedUrl = await createSignedUrl("get", imageId);
+      const signedUrl = await createSignedUrl("put", imageId);
       return { imageId, signedUrl };
     })
   );

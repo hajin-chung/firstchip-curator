@@ -14,7 +14,7 @@ export const Images: Component<Props> = ({ imageUrls }) => {
   return (
     <div class="w-full h-[540px] rounded-lg flex flex-col items-center gap-4">
       <div
-        class="w-full h-full relative overflow-hidden"
+        class="w-full h-full relative"
         classList={{
           loading: loadCount() !== imageUrls.length,
         }}

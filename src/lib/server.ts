@@ -36,11 +36,11 @@ const S3 = new S3Client({
   },
 });
 
-const createSignedUrl = async (type: "get" | "put", id: string) => {
+export const createSignedUrl = async (type: "get" | "put", id: string) => {
   let command =
     type === "get"
-      ? new PutObjectCommand({ Bucket: BUCKET_NAME, Key: id })
-      : new GetObjectCommand({ Bucket: BUCKET_NAME, Key: id });
+      ? new GetObjectCommand({ Bucket: BUCKET_NAME, Key: id })
+      : new PutObjectCommand({ Bucket: BUCKET_NAME, Key: id });
 
   const signedUrl = await getSignedUrl(S3, command, {
     expiresIn: PRESIGNED_URL_EXPIRES,

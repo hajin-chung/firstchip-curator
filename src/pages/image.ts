@@ -1,4 +1,4 @@
-import { createGetImageUrl } from "@lib/server";
+import { createSignedUrl } from "@lib/server";
 import type { APIRoute } from "astro";
 
 export const get: APIRoute = async ({ url }) => {
@@ -8,7 +8,7 @@ export const get: APIRoute = async ({ url }) => {
     return new Response();
   }
 
-  const signedUrl = await createGetImageUrl(id);
+  const signedUrl = await createSignedUrl("get", id);
 
   return new Response(null, {
     status: 307,

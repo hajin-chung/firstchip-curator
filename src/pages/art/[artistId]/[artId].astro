@@ -1,8 +1,7 @@
 ---
 import ArrowButton from "@components/ArrowButton.astro";
 import { DeleteArtButton } from "@components/DeleteArtButton";
-import { Pencil } from "@components/icons/Pencil";
-import { Trash } from "@components/icons/Trash";
+import { Images } from "@components/Images";
 import Layout from "@layouts/Layout.astro";
 import { getArtById, getAuthDataBySessionId } from "@lib/server";
 
@@ -30,17 +29,7 @@ const { isAuthed, artist: authData } = await getAuthDataBySessionId(
       href={`/art/${art.artistId}`}
     />
   </div>
-  <div class="w-full max-h-[540px] flex flex-col">
-    {
-      images &&
-        images.map((image) => (
-          <img
-            src={image}
-            class="img drop-shadow-2xl rounded-lg self-center max-h-full"
-          />
-        ))
-    }
-  </div>
+  <Images imageUrls={images} client:idle />
   <div class="flex flex-col gap-[2px] mx-3 my-5 items-start">
     <h2 class="text-2xl font-extrabold">{art.name}</h2>
     <a href={`/art/${art.artistId}`} class="text-xl font-bold mb-5">

@@ -36,6 +36,18 @@ const S3 = new S3Client({
   },
 });
 
+const createSignedUrl = async (type: "get" | "put", id: string) => {
+  let command =
+    type === "get"
+      ? new PutObjectCommand({ Bucket: BUCKET_NAME, Key: id })
+      : new GetObjectCommand({ Bucket: BUCKET_NAME, Key: id });
+
+  const signedUrl = await getSignedUrl(S3, command, {
+    expiresIn: PRESIGNED_URL_EXPIRES,
+  });
+  return signedUrl;
+};
+
 export const getArtById = async (artId: string, artistId: string) => {
   const artResult = await conn.execute(
     "SELECT id, name, description, artistId FROM art WHERE id=?",
@@ -56,11 +68,7 @@ export const getArtById = async (artId: string, artistId: string) => {
 
   const imageUrls = await Promise.all(
     images.map(({ id }) => {
-      return getSignedUrl(
-        S3,
-        new GetObjectCommand({ Bucket: BUCKET_NAME, Key: id }),
-        { expiresIn: PRESIGNED_URL_EXPIRES }
-      );
+      return createSignedUrl("get", id);
     })
   );
 
@@ -160,11 +168,7 @@ export const createArt = async (
   const signedUrls = await Promise.all(
     [...Array(imageCount).keys()].map(async () => {
       const imageId = createId();
-      const signedUrl = await getSignedUrl(
-        S3,
-        new PutObjectCommand({ Bucket: BUCKET_NAME, Key: imageId }),
-        { expiresIn: 3600 }
-      );
+      const signedUrl = await createSignedUrl("get", imageId);
       return { imageId, signedUrl };
     })
   );
@@ -193,11 +197,7 @@ export const updateArt = async (
   const signedUrls = await Promise.all(
     [...Array(imageCount).keys()].map(async () => {
       const imageId = createId();
-      const signedUrl = await getSignedUrl(
-        S3,
-        new PutObjectCommand({ Bucket: BUCKET_NAME, Key: imageId }),
-        { expiresIn: 3600 }
-      );
+      const signedUrl = await createSignedUrl("put", imageId);
       return { imageId, signedUrl };
     })
   );
@@ -212,24 +212,6 @@ export const updateArt = async (
 export const deleteArt = async (artId: string) => {
   const res = await conn.execute("DELETE FROM art WHERE id=?", [artId]);
   return res;
-};
-
-export const createGetImageUrl = async (id: string) => {
-  const signedUrl = await getSignedUrl(
-    S3,
-    new GetObjectCommand({ Bucket: BUCKET_NAME, Key: id }),
-    { expiresIn: 3600 }
-  );
-  return signedUrl;
-};
-
-export const createPutImageUrl = async (id: string) => {
-  const signedUrl = await getSignedUrl(
-    S3,
-    new PutObjectCommand({ Bucket: BUCKET_NAME, Key: id }),
-    { expiresIn: 3600 }
-  );
-  return signedUrl;
 };
 
 export const createImage = async (id: string, artId: string) => {

@@ -65,9 +65,13 @@ export const Images: Component<Props> = ({ imageUrls }) => {
           >
             <img
               src={image}
-              class="drop-shadow-2xl rounded-lg self-center max-h-full  max-w-full transition opacity-0"
+              class="drop-shadow-2xl rounded-lg self-center transition opacity-0 max-h-full max-w-full object-contain m-0"
               onLoad={(evt) => {
-                evt.currentTarget.classList.remove("opacity-0");
+                const elem = evt.currentTarget;
+                if (elem.clientHeight > elem.clientWidth)
+                  elem.style.height = "100%";
+                else elem.style.width = "100%";
+                elem.classList.remove("opacity-0");
                 setLoadCount((cnt) => cnt + 1);
               }}
               onDragStart={(evt) => evt.preventDefault()}

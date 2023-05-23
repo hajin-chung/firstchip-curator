@@ -1,5 +1,5 @@
 import {
-  createPutImageUrl,
+	createSignedUrl,
   getAuthDataBySessionId,
   updatePicture,
   updateProfile,
@@ -31,7 +31,7 @@ export const post: APIRoute = async ({ cookies, request }) => {
     updateProfile(authData.artistId, name, description);
     if (didPictureUpdate) {
       await updatePicture(authData.artistId);
-      signedUrl = await createPutImageUrl(authData.artistId);
+      signedUrl = await createSignedUrl("put", authData.artistId);
     }
 
     return new Response(JSON.stringify({ error: false, signedUrl }), {

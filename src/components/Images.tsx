@@ -45,11 +45,11 @@ export const Images: Component<Props> = ({ imageUrls }) => {
         onTouchStart={(evt) =>
           setMousePos({ x: evt.touches[0].clientX, y: evt.touches[0].clientY })
         }
-        onTouchMove={(evt) => {
+        onTouchEnd={(evt) => {
           const pos = mousePos();
           if (!pos) return;
-          const dx = pos.x - evt.touches[0].clientX;
-          const dy = pos.y - evt.touches[0].clientY;
+          const dx = pos.x - evt.changedTouches[0].clientX;
+          const dy = pos.y - evt.changedTouches[0].clientY;
 
           if (dx > 0) next();
           else if (dx < 0) prev();

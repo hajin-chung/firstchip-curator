@@ -11,6 +11,20 @@ export const Images: Component<Props> = ({ imageUrls }) => {
     { x: number; y: number } | undefined
   >();
 
+  const next = () => {
+    setImageIndex((idx) => {
+      if (idx + 1 < imageUrls.length) return idx + 1;
+      else return idx;
+    });
+  };
+
+  const prev = () => {
+    setImageIndex((idx) => {
+      if (idx - 1 >= 0) return idx - 1;
+      else return idx;
+    });
+  };
+
   return (
     <div class="w-full h-[540px] rounded-lg flex flex-col items-center gap-4">
       <div
@@ -25,17 +39,20 @@ export const Images: Component<Props> = ({ imageUrls }) => {
           const dx = pos.x - evt.clientX;
           const dy = pos.y - evt.clientY;
 
-          if (dx > 0) {
-            setImageIndex((idx) => {
-              if (idx + 1 < imageUrls.length) return idx + 1;
-              else return idx;
-            });
-          } else if (dx < 0) {
-            setImageIndex((idx) => {
-              if (idx - 1 >= 0) return idx - 1;
-              else return idx;
-            });
-          }
+          if (dx > 0) next();
+          else if (dx < 0) prev();
+        }}
+        onTouchStart={(evt) =>
+          setMousePos({ x: evt.touches[0].clientX, y: evt.touches[0].clientY })
+        }
+        onTouchMove={(evt) => {
+          const pos = mousePos();
+          if (!pos) return;
+          const dx = pos.x - evt.touches[0].clientX;
+          const dy = pos.y - evt.touches[0].clientY;
+
+          if (dx > 0) next();
+          else if (dx < 0) prev();
         }}
       >
         {imageUrls.map((image, idx) => (

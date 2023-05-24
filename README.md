@@ -4,4 +4,5 @@ simple art curator
 
 # todo list
 
-- [ ] kakao auth
+- [x] kakao auth
+- [ ] error handling

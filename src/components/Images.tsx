@@ -83,8 +83,10 @@ export const Images: Component<Props> = ({ imageUrls }) => {
       <div class="flex gap-2">
         {imageUrls.map((_, idx) => (
           <button
-            class="rounded-full w-2 h-2 bg-gray-300 transition"
-            classList={{ "bg-gray-600": imageIndex() === idx }}
+            class="rounded-full w-2 h-2 transition"
+            style={{
+              "background-color": imageIndex() === idx ? "#6b7280" : "#e5e7eb",
+            }}
             onClick={() => setImageIndex(idx)}
           />
         ))}

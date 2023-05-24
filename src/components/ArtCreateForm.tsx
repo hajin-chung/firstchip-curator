@@ -109,11 +109,11 @@ export const ArtCreateForm: Component = () => {
           />
           {selected() === undefined && (
             <label
-              class="bg-gray-100 w-full h-full rounded-lg shadow-lg flex justify-center items-center group border-black transition cursor-pointer"
+              class="bg-gray-100 dark:bg-neutral-900 dark:border-gray-100 dark:border-2 w-full h-full rounded-lg shadow-lg flex justify-center items-center group border-black transition cursor-pointer"
               for="imageInput"
             >
               <label
-                class="text-xl flex justify-center items-center cursor-pointer text-gray-300 group-hover:text-gray-700 border-black w-20 h-20 transition"
+                class="text-xl flex justify-center items-center cursor-pointer text-gray-300 dark:group-hover:text-white group-hover:text-gray-700 border-black w-20 h-20 transition"
                 for="imageInput"
               >
                 <Plus />
@@ -185,7 +185,7 @@ export const ArtCreateForm: Component = () => {
         <input
           value={name()}
           onInput={(evt) => setName(evt.currentTarget.value)}
-          class="border-[1px] p-1 border-black rounded-lg flex-1"
+          class="border-[1px] p-1 border-black dark:border-white dark:bg-neutral-900 rounded-lg flex-1"
         />
       </div>
       <div class="h-2" />
@@ -194,7 +194,7 @@ export const ArtCreateForm: Component = () => {
         <textarea
           value={description()}
           onInput={(evt) => setDescription(evt.currentTarget.value)}
-          class="border-[1px] p-1 border-black rounded-lg flex-1"
+          class="border-[1px] p-1 border-black dark:border-white dark:bg-neutral-900 rounded-lg flex-1"
         />
       </div>
       <div class="h-4" />

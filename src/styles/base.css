@@ -3,11 +3,11 @@
 @tailwind utilities;
 
 .hover-bg {
-	@apply hover:bg-slate-100 transition rounded-lg;
+	@apply hover:bg-slate-100 dark:hover:bg-neutral-700 transition rounded-lg;
 }
 
 .btn {
-	@apply text-black border-black hover:bg-black hover:text-white transition;
+	@apply border-black dark:border-white hover:text-white hover:bg-black dark:hover:bg-white dark:hover:text-black transition;
 }
 
 .btn-disabled {

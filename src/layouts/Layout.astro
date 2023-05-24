@@ -10,7 +10,7 @@ const { title } = Astro.props;
 ---
 
 <!DOCTYPE html>
-<html lang="kr">
+<html lang="kr" class="dark">
   <head>
     <script
       type="text/partytown"
@@ -28,9 +28,21 @@ const { title } = Astro.props;
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
+    <script>
+      const themeOld = localStorage.getItem("theme");
+      if (themeOld === "dark") {
+        document.documentElement.classList.add("dark");
+      } else if (themeOld === "light") {
+        document.documentElement.classList.remove("dark");
+      } else {
+        document.documentElement.classList.remove("dark");
+      }
+    </script>
     <title>{title}</title>
   </head>
-  <body class="w-full flex justify-center font-serif">
+  <body
+    class="w-full flex justify-center font-serif dark:bg-neutral-900 dark:text-white"
+  >
     <main class="w-full max-w-[640px] flex flex-col mx-5 items-start">
       <slot />
     </main>

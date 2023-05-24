@@ -71,7 +71,7 @@ export const ProfileEdit: Component<Props> = ({ artist, arts }) => {
     <div class="flex flex-col items-start gap-4 w-full">
       <div class="grid grid-cols-2 w-full">
         <p class="mt-4">프로필 사진</p>
-        <div class="relative h-20 w-20 rounded-full border-2 border-black p-[1px] group">
+        <div class="relative h-20 w-20 rounded-full border-2 border-black dark:border-white p-[1px] group">
           <label
             for="pictureInput"
             class="absolute z-10 top-0 left-0 w-full h-full bg-opacity-80 bg-white hidden group-hover:flex justify-center items-center rounded-full p-6 hover:cursor-pointer"
@@ -93,7 +93,7 @@ export const ProfileEdit: Component<Props> = ({ artist, arts }) => {
       <div class="grid grid-cols-2 w-full">
         <p>이름</p>
         <input
-          class="p-1 border-[1px] border-black rounded-lg"
+          class="p-1 border-[1px] border-black dark:border-white dark:bg-neutral-900 rounded-lg"
           type="text"
           value={name()}
           onInput={(e) => setName(e.currentTarget.value)}
@@ -103,7 +103,7 @@ export const ProfileEdit: Component<Props> = ({ artist, arts }) => {
       <div class="grid grid-cols-2 w-full">
         <p>소개</p>
         <textarea
-          class="p-1 border-[1px] border-black rounded-lg"
+          class="p-1 border-[1px] border-black dark:border-white dark:bg-neutral-900 rounded-lg"
           value={description()}
           onInput={(e) => setDescription(e.currentTarget.value)}
           placeholder={description()}
@@ -123,8 +123,8 @@ export const ProfileEdit: Component<Props> = ({ artist, arts }) => {
         <button
           class="border-[1px] py-1 px-2 rounded-full transition self-end"
           classList={{
-            "border-black hover:bg-black hover:text-white": didUpdate(),
-            "border-gray-400 text-gray-400": !didUpdate(),
+            "btn": didUpdate(),
+            "btn-disabled": !didUpdate(),
           }}
           onClick={handleSubmit}
         >

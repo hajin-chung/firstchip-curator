@@ -13,13 +13,11 @@ const { text, href } = Astro.props;
 >
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    fill="#000000"
     width="24px"
     height="24px"
     viewBox="0 0 24 24"
     id="left-arrow"
-    data-name="Flat Line"
-    class="icon flat-line"
+    class="icon flat-line dark:stroke-white dark:fill-white stroke-black fill-black"
   >
     <line
       id="primary"
@@ -27,13 +25,13 @@ const { text, href } = Astro.props;
       y1="12"
       x2="3"
       y2="12"
-      style="fill: none; stroke: rgb(0, 0, 0); stroke-linecap: round; stroke-linejoin: round; stroke-width: 2;"
+      style="stroke-linecap: round; stroke-linejoin: round; stroke-width: 2;"
     ></line>
     <polyline
       id="primary-2"
       data-name="primary"
       points="6 9 3 12 6 15"
-      style="fill: none; stroke: rgb(0, 0, 0); stroke-linecap: round; stroke-linejoin: round; stroke-width: 2;"
+      style="stroke-linecap: round; stroke-linejoin: round; stroke-width: 2;"
     ></polyline>
   </svg>
   <p class="hover:drop-shadow-2xl">{text}</p>

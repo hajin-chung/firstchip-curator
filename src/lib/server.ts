@@ -204,9 +204,16 @@ export const updateArt = async (
   return { signedUrls, artId };
 };
 
-export const deleteArt = async (artId: string) => {
-  const res = await conn.execute("DELETE FROM art WHERE id=?", [artId]);
-  return res;
+export const deleteArt = async (artId: string, artistId: string) => {
+  const res = await conn.execute("DELETE FROM art WHERE id=? AND artistId=?", [
+    artId,
+    artistId,
+  ]);
+
+	const rowsAffected = res.rowsAffected;
+
+	if (rowsAffected === 0) throw new Error("no art with id or artistId");
+	else return;
 };
 
 export const createImage = async (id: string, artId: string) => {

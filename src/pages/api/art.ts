@@ -1,4 +1,9 @@
-import { createArt, updateArt, getAuthDataBySessionId, deleteArt } from "@lib/server";
+import {
+  createArt,
+  updateArt,
+  getAuthDataBySessionId,
+  deleteArt,
+} from "@lib/server";
 import type { APIRoute } from "astro";
 
 export const post: APIRoute = async ({ request, cookies }) => {
@@ -102,11 +107,19 @@ export const del: APIRoute = async ({ request, cookies }) => {
     artId: string;
   };
 
-  const res = await deleteArt(artId);
-
-  return new Response(
-    JSON.stringify({
-      error: false,
-    })
-  );
+  try {
+    await deleteArt(artId, artist.artistId);
+    return new Response(
+      JSON.stringify({
+        error: false,
+      }),
+      {
+        status: 200,
+      }
+    );
+  } catch (e) {
+    return new Response(JSON.stringify({ error: true, message: e }), {
+      status: 500,
+    });
+  }
 };

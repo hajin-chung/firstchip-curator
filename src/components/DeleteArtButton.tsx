@@ -12,7 +12,11 @@ export const DeleteArtButton: Component<Props> = ({ artId }) => {
       body: JSON.stringify({ artId }),
     });
 
-    if (window) window.location.href = ".";
+    if (res.status === 200) {
+      if (window) window.location.href = ".";
+    } else {
+      // show error message
+    }
   };
 
   return (

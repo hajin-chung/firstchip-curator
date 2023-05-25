@@ -38,7 +38,7 @@ const { isAuthed, artist: authData } = await getAuthDataBySessionId(
     <p class="whitespace-pre-line">{art.description}</p>
   </div>
   {
-    isAuthed && authData && (
+    isAuthed && authData && authData.artistId === artistId && (
       <div class="flex gap-4 self-end">
         <DeleteArtButton artId={artId} client:load />
       </div>

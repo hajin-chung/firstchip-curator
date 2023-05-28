@@ -2,6 +2,7 @@
 import ArrowButton from "@components/ArrowButton.astro";
 import { DeleteArtButton } from "@components/DeleteArtButton";
 import { Images } from "@components/Images";
+import { Home } from "@components/icons/Home";
 import Layout from "@layouts/Layout.astro";
 import { getArtById, getAuthDataBySessionId } from "@lib/server";
 
@@ -23,11 +24,12 @@ const { isAuthed, artist: authData } = await getAuthDataBySessionId(
 ---
 
 <Layout title={art.name}>
-  <div>
+  <div class="w-full flex justify-between items-center">
     <ArrowButton
       text={`${artist.name}의 작품 보러가기`}
       href={`/art/${art.artistId}`}
     />
+    <a class="w-7 h-7 hover-bg p-1" href="/"><Home /></a>
   </div>
   <Images imageUrls={images} client:idle />
   <div class="flex flex-col gap-[2px] mx-3 my-5 items-start">

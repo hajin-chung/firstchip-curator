@@ -29,6 +29,11 @@ export default defineConfig({
 		}
 	})],
 	output: "server",
+	server: {
+		headers: {
+			"Cache-Control": "max-age=120",
+		},
+	},
 	adapter: cloudflare(),
 	vite: {
 		define: envNames.reduce((pv, v) => {

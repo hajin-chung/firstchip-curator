@@ -11,10 +11,6 @@ export const titles = [
     id: "gallery",
     name: "미술관 소규모 전시",
   },
-  {
-    id: "test",
-    name: "테스트",
-  },
 ];
 
 export const exhibitions: Record<

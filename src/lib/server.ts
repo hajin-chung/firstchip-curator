@@ -86,6 +86,18 @@ export const getArtistById = async (artistId: string) => {
   return { artist, arts };
 };
 
+export const createSession = async (artistId: string) => {
+  const sessionId = createId();
+  const sessionExpires = new Date(new Date().getTime() + SESSION_DURATION);
+  const sessionRes = await conn.execute(
+    "INSERT INTO session (id, artistId, expires) VALUES (?, ?, ?)",
+    [sessionId, artistId, sessionExpires.getTime()]
+  );
+  // TODO: check query success
+
+	return {sessionId, sessionExpires};
+}
+
 // if sub doesn't exists, create new user
 // create session
 // return sessionId with expires
@@ -114,14 +126,7 @@ export const authUser = async ({
     artistId = (checkRes.rows[0] as Artist).id;
   }
 
-  // create session
-  const sessionId = createId();
-  const sessionExpires = new Date(new Date().getTime() + SESSION_DURATION);
-  const sessionRes = await conn.execute(
-    "INSERT INTO session (id, artistId, expires) VALUES (?, ?, ?)",
-    [sessionId, artistId, sessionExpires.getTime()]
-  );
-  // TODO: check query success
+	const {sessionId, sessionExpires} = await createSession(artistId);
 
   return { sessionId, sessionExpires };
 };
@@ -242,3 +247,12 @@ export const updatePicture = async (artistId: string) => {
   ]);
   // TODO: handle res
 };
+
+export const getAllArtists = async () => {
+	const res = await conn.execute(
+		"SELECT id, name FROM artist"
+	);
+
+	const artists = res.rows as {id: string, name: string}[];
+	return artists;
+}

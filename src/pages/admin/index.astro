@@ -1,0 +1,21 @@
+---
+import LayoutWithHeader from "@layouts/LayoutWithHeader.astro";
+import { getAllArtists } from "@lib/server";
+
+// TODO: check if admin
+const artists = await getAllArtists();
+---
+
+<LayoutWithHeader title="admin page">
+  {
+    artists.map(({ id, name }) => (
+      <a href={`/admin/as/${id}`} class="hover-bg p-1 rounded-lg artist" id={id}>
+        {name}
+      </a>
+    ))
+  }
+  <div class="h-4"></div>
+  <a href="/admin/as/create" class="hover-bg p-1 rounded-lg"
+    >새 아티스트 추가하기</a
+  >
+</LayoutWithHeader>

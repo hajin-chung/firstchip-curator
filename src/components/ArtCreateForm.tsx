@@ -123,7 +123,7 @@ export const ArtCreateForm: Component = () => {
           {selected() !== undefined && (
             <img
               src={URL.createObjectURL(images[selected()!])}
-              class="w-full h-full rounded-lg shadow-lg"
+              class="w-full h-full rounded-lg shadow-lg object-contain"
             />
           )}
         </div>

@@ -17,7 +17,7 @@ const artistIdList = [
   "wwmzzkqzk3",
   "xc7bt1cnzv",
   "xig29itsqg",
-	"e1vt3geljt",
+  "e1vt3geljt",
 ];
 
 const artistList = await Promise.all(
@@ -50,9 +50,11 @@ const artistList = await Promise.all(
       {
         artistList.map(({ artist, arts }) => (
           <>
-            <a class="hover-bg font-bold p-1" href={`/art/${artist.id}`}>
-              {artist.name}
-            </a>
+            <div class="flex items-center">
+              <a class="hover-bg font-bold p-1" href={`/art/${artist.id}`}>
+                {artist.name}
+              </a>
+            </div>
             <div class="flex flex-col gap-1 items-start">
               {arts.map((art) => (
                 <a class="hover-bg p-1" href={`/art/${artist.id}/${art.id}`}>

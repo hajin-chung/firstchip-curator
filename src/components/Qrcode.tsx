@@ -17,14 +17,14 @@ export const Qrcode: Component = () => {
 
   return (
     <div class="flex flex-col gap-2 self-end">
-      <button class="hover-bg p-1" onClick={() => setShow((s) => !s)}>
-        QR코드 보기
-      </button>
       {show() && (
         <div class="w-20 h-20">
           <img src={code()} />
         </div>
       )}
+      <button class="hover-bg p-1" onClick={() => setShow((s) => !s)}>
+        QR코드 보기
+      </button>
     </div>
   );
 };

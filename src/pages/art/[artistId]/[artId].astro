@@ -47,5 +47,5 @@ const { isAuthed, artist: authData } = await getAuthDataBySessionId(
       </div>
     )
   }
-	<Qrcode client:load />
+  <Qrcode useCurrent={true} url="" client:load />
 </Layout>

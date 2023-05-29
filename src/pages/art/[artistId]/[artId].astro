@@ -2,6 +2,7 @@
 import ArrowButton from "@components/ArrowButton.astro";
 import { DeleteArtButton } from "@components/DeleteArtButton";
 import { Images } from "@components/Images";
+import { Qrcode } from "@components/Qrcode";
 import { Home } from "@components/icons/Home";
 import Layout from "@layouts/Layout.astro";
 import { getArtById, getAuthDataBySessionId } from "@lib/server";
@@ -46,4 +47,5 @@ const { isAuthed, artist: authData } = await getAuthDataBySessionId(
       </div>
     )
   }
+	<Qrcode client:load />
 </Layout>

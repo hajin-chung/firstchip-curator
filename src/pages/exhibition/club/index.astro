@@ -1,0 +1,66 @@
+---
+import LayoutWithHeader from "@layouts/LayoutWithHeader.astro";
+import { titles } from "@lib/content";
+import { getArtistById } from "@lib/server";
+
+const slug = "club";
+
+const artistIdList = [
+	"ptyuturaj7",
+	"wpjps97mrt",
+	"yotx9p3c2c",
+	"xxb5x8va0t",
+	"ntfqlahuno",
+	"oap153ee14",
+	"p1a6usy4ll",
+	"fft6lxew1f"
+];
+
+const artistList = await Promise.all(
+  artistIdList.map(async (id) => await getArtistById(id))
+);
+---
+
+<LayoutWithHeader title="Muse Match">
+  <main>
+    <div class="h-6"></div>
+    <div class="flex gap-8 items-end flex-wrap">
+      {
+        titles.map(({ id, name }) => (
+          <a
+            class:list={{
+              "text-2xl font-extrabold": slug === id,
+              "text-xl text-gray-400 font-extrabold": slug !== id,
+            }}
+            href={`/exhibition/${id}`}
+          >
+            {name}
+          </a>
+        ))
+      }
+    </div>
+    <div
+      class="grid grid-cols-2 mt-8 gap-4 items-start"
+      style="grid-template-columns: auto 1fr;"
+    >
+      {
+        artistList.map(({ artist, arts }) => (
+          <>
+            <div class="flex items-center">
+              <a class="hover-bg font-bold p-1" href={`/art/${artist.id}`}>
+                {artist.name}
+              </a>
+            </div>
+            <div class="flex flex-col gap-1 items-start">
+              {arts.map((art) => (
+                <a class="hover-bg p-1" href={`/art/${artist.id}/${art.id}`}>
+                  {art.name}
+                </a>
+              ))}
+            </div>
+          </>
+        ))
+      }
+    </div>
+  </main>
+</LayoutWithHeader>

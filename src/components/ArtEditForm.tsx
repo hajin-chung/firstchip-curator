@@ -4,14 +4,17 @@ import type { DOMElement } from "solid-js/jsx-runtime";
 import { Trash } from "./icons/Trash";
 import { Plus } from "./icons/Plus";
 import { ChevronLeft, ChevronRight } from "./icons/Chevron";
+import { Loading } from "./icons/Loading";
 
 type Props = {
+  artId: string;
   name: string;
   description: string;
   images: string[];
 };
 
 export const ArtEditForm: Component<Props> = ({
+  artId,
   name: oldName,
   description: oldDescription,
   images: oldImages,
@@ -20,6 +23,7 @@ export const ArtEditForm: Component<Props> = ({
   const [description, setDescription] = createSignal(oldDescription);
   const [images, setImages] = createStore<File[]>([]);
   const [selected, setSelected] = createSignal<number | undefined>();
+  const [isLoading, setLoading] = createSignal(false);
   let imageInputRef!: HTMLInputElement;
 
   onMount(() => {
@@ -82,7 +86,11 @@ export const ArtEditForm: Component<Props> = ({
   };
 
   const handleSubmit = async () => {
+    if (isLoading()) return;
+    setLoading(true);
+
     const createArtBody = {
+      artId,
       name: name(),
       description: description(),
       imageCount: images.length,
@@ -93,7 +101,7 @@ export const ArtEditForm: Component<Props> = ({
       body: JSON.stringify(createArtBody),
     });
 
-    const { error, signedUrls, artId, artistId } = (await res.json()) as {
+    const { error, signedUrls, artistId } = (await res.json()) as {
       error: boolean;
       signedUrls: { imageId: string; signedUrl: string }[];
       artId: string;
@@ -220,13 +228,24 @@ export const ArtEditForm: Component<Props> = ({
         />
       </div>
       <div class="h-4" />
-      <button
-        class="self-end rounded-full border-[1px] px-2 py-1 border-black hover:bg-black hover:text-white transition"
-        type="submit"
-        onClick={handleSubmit}
-      >
-        수정하기
-      </button>
+      <div class="flex self-end gap-4 items-center">
+        {isLoading() && (
+          <div class="w-8 h-8">
+            <Loading />
+          </div>
+        )}
+        <button
+          class="rounded-full border-[1px] px-2 py-1 btn"
+          classList={{
+            btn: !isLoading(),
+            "btn-disabled": isLoading(),
+          }}
+          type="submit"
+          onClick={handleSubmit}
+        >
+          수정하기
+        </button>
+      </div>
     </div>
   );
 };

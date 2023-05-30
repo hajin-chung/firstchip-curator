@@ -26,6 +26,7 @@ const { art, artist, images } = await getArtById(artId, authData.artistId);
     <ArrowButton text="프로필로 돌아가기" href={`/art/${authData.artistId}`} />
   </div>
   <ArtEditForm
+		artId={artId}
     name={art.name}
     description={art.description}
     images={images}

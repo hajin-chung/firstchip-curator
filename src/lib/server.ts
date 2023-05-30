@@ -95,8 +95,8 @@ export const createSession = async (artistId: string) => {
   );
   // TODO: check query success
 
-	return {sessionId, sessionExpires};
-}
+  return { sessionId, sessionExpires };
+};
 
 // if sub doesn't exists, create new user
 // create session
@@ -126,7 +126,7 @@ export const authUser = async ({
     artistId = (checkRes.rows[0] as Artist).id;
   }
 
-	const {sessionId, sessionExpires} = await createSession(artistId);
+  const { sessionId, sessionExpires } = await createSession(artistId);
 
   return { sessionId, sessionExpires };
 };
@@ -191,6 +191,10 @@ export const updateArt = async (
     [name, description, artId]
   );
 
+  const deleteImageRes = await conn.execute("DELETE FROM image WHERE artId=?", [
+    artId,
+  ]);
+
   // TODO: check query success
 
   // generate imageCount image upload links
@@ -215,10 +219,10 @@ export const deleteArt = async (artId: string, artistId: string) => {
     artistId,
   ]);
 
-	const rowsAffected = res.rowsAffected;
+  const rowsAffected = res.rowsAffected;
 
-	if (rowsAffected === 0) throw new Error("no art with id or artistId");
-	else return;
+  if (rowsAffected === 0) throw new Error("no art with id or artistId");
+  else return;
 };
 
 export const createImage = async (id: string, artId: string) => {
@@ -249,10 +253,8 @@ export const updatePicture = async (artistId: string) => {
 };
 
 export const getAllArtists = async () => {
-	const res = await conn.execute(
-		"SELECT id, name FROM artist"
-	);
+  const res = await conn.execute("SELECT id, name FROM artist");
 
-	const artists = res.rows as {id: string, name: string}[];
-	return artists;
-}
+  const artists = res.rows as { id: string; name: string }[];
+  return artists;
+};

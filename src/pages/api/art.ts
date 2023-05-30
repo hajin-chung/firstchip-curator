@@ -63,16 +63,17 @@ export const put: APIRoute = async ({ request, cookies }) => {
     );
   }
 
-  const { name, description, imageCount } = (await request.json()) as {
+  const { artId, name, description, imageCount } = (await request.json()) as {
+		artId: string;
     name: string;
     description: string;
     imageCount: number;
   };
 
-  const { signedUrls, artId } = await updateArt(
+  const { signedUrls } = await updateArt(
+		artId,
     name,
     description,
-    artist.artistId,
     imageCount
   );
 

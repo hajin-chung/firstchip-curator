@@ -9,6 +9,6 @@ export const titles = [
   },
   {
     id: "gallery",
-    name: "미술관 소규모 전시",
+    name: "미술관 Electric Bugs",
   },
 ];

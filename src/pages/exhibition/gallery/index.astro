@@ -1,13 +1,17 @@
 ---
-const { slug } = Astro.params;
 import LayoutWithHeader from "@layouts/LayoutWithHeader.astro";
-import { exhibitions, titles } from "@lib/content";
+import { titles } from "@lib/content";
+import { getArtistById } from "@lib/server";
 
-if (typeof slug === "undefined" || !(slug in exhibitions)) {
-  return Astro.redirect("/404");
-}
+const slug = "gallery";
 
-const exhibition = exhibitions[slug];
+const artistIdList = [
+	"eqb6zj97so"
+];
+
+const artistList = await Promise.all(
+  artistIdList.map(async (id) => await getArtistById(id))
+);
 ---
 
 <LayoutWithHeader title="Muse Match">
@@ -28,23 +32,23 @@ const exhibition = exhibitions[slug];
         ))
       }
     </div>
-    {
-      slug === "gallery" && (
-        <p class="text-lg font-bold my-2">위치: 미술관 공사장</p>
-      )
-    }
+		<p class="text-lg font-bold my-2">위치: 미술관 공사장</p>
     <div
       class="grid grid-cols-2 mt-8 gap-4 items-start"
       style="grid-template-columns: auto 1fr;"
     >
       {
-        exhibition.arts.map(({ name, arts }) => (
+        artistList.map(({ artist, arts }) => (
           <>
-            <p class="font-bold p-1">{name}</p>
+            <div class="flex items-center">
+              <a class="hover-bg font-bold p-1" href={`/art/${artist.id}`}>
+                {artist.name}
+              </a>
+            </div>
             <div class="flex flex-col gap-1 items-start">
               {arts.map((art) => (
-                <a class="hover-bg p-1" href={`/exhibition/${slug}/${art}`}>
-                  {art}
+                <a class="hover-bg p-1" href={`/art/${artist.id}/${art.id}`}>
+                  {art.name}
                 </a>
               ))}
             </div>

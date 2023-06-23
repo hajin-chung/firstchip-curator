@@ -13,12 +13,12 @@ const envNames = [
   "CLOUDFLARE_ACCOUNT_ID",
 ];
 
-// check process env
-envNames.forEach((name) => {
-  if (process.env[name]) {
-    throw new Error(`no environment variable named ${name}`);
-  }
-});
+// // check process env
+// envNames.forEach((name) => {
+//   if (process.env[name]) {
+//     throw new Error(`no environment variable named ${name}`);
+//   }
+// });
 
 // https://astro.build/config
 export default defineConfig({

@@ -7,26 +7,30 @@
     "start": "astro dev",
     "build": "astro build",
     "preview": "wrangler pages dev ./dist --proxy=3000",
+    "generate": "drizzle-kit generate:pg --schema=./src/db/schema.ts",
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/cloudflare": "^6.2.4",
     "@astrojs/solid-js": "^2.1.1",
     "@astrojs/tailwind": "^3.1.2",
+    "@astrojs/vercel": "^3.5.0",
     "@aws-sdk/client-s3": "^3.332.0",
     "@aws-sdk/s3-request-presigner": "^3.332.0",
     "@paralleldrive/cuid2": "^2.2.0",
     "@planetscale/database": "^1.7.0",
     "@types/qrcode": "^1.5.0",
-    "astro": "^2.4.5",
+    "astro": "^2.7.0",
     "dotenv": "^16.0.3",
+    "drizzle-orm": "^0.27.0",
     "jwt-decode": "^3.1.2",
+    "postgres": "^3.3.5",
     "qrcode": "^1.5.3",
     "solid-js": "^1.7.5",
     "tailwindcss": "^3.3.2"
   },
   "devDependencies": {
     "@astrojs/partytown": "^1.2.1",
+    "drizzle-kit": "^0.19.2",
     "wrangler": "^2.20.0"
   }
 }

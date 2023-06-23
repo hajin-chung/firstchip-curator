@@ -9,3 +9,4 @@ connect spaces and artists
 3. better error handling
 4. check image sizes
 5. handle env expires
+6. host on vercel

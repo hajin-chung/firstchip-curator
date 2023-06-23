@@ -1,6 +1,8 @@
 // server functions mainly fetching data from db
 
-import { Config, connect } from "@planetscale/database";
+import { drizzle } from "drizzle-orm/postgres-js";
+import postgres from "postgres";
+import * as tables from "@db/schema";
 import { SESSION_DURATION, type Art, type Artist, type Image } from "./type";
 import { createId } from "@lib/utils";
 import {
@@ -9,18 +11,11 @@ import {
   S3Client,
 } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+import { and, eq } from "drizzle-orm";
 
-const dbConfig: Config = {
-  host: import.meta.env.DATABASE_HOST,
-  username: import.meta.env.DATABASE_USERNAME,
-  password: import.meta.env.DATABASE_PASSWORD,
-  fetch: (url, init) => {
-    delete (init as any)["cache"]; // Remove cache header
-    return fetch(url, init);
-  },
-};
-
-const conn = connect(dbConfig);
+const DATABASE_URI = import.meta.env.DATABASE_URI;
+const client = postgres(DATABASE_URI);
+const db = drizzle(client);
 
 const ACCOUNT_ID = import.meta.env.CLOUDFLARE_ACCOUNT_ID;
 const ACCESS_KEY = import.meta.env.R2_ACCESS_KEY;
@@ -49,39 +44,62 @@ export const createSignedUrl = async (type: "get" | "put", id: string) => {
 };
 
 export const getArtById = async (artId: string, artistId: string) => {
-  const artResult = await conn.execute(
-    "SELECT id, name, description, artistId FROM art WHERE id=?",
-    [artId]
-  );
-  const artistResult = await conn.execute(
-    "SELECT id, name, picture FROM artist WHERE id=?",
-    [artistId]
-  );
-  const imagesResult = await conn.execute(
-    "SELECT id, artId FROM image WHERE artId=?",
-    [artId]
-  );
+  const art = (
+    await db
+      .select({
+        id: tables.art.id,
+        name: tables.art.name,
+        description: tables.art.description,
+        artistId: tables.art.artistId,
+      })
+      .from(tables.art)
+      .where(eq(tables.art.id, artId))
+  )[0];
 
-  const art = artResult.rows[0] as Art;
-  const artist = artistResult.rows[0] as Artist;
-  const images = imagesResult.rows as Image[];
+  const artist = (
+    await db
+      .select({
+        id: tables.artist.id,
+        name: tables.artist.name,
+        picture: tables.artist.picture,
+      })
+      .from(tables.artist)
+      .where(eq(tables.artist.id, artistId))
+  )[0];
+
+  const images = await db
+    .select({
+      id: tables.image.id,
+      artId: tables.image.artId,
+    })
+    .from(tables.image)
+    .where(eq(tables.image.artId, artId));
+
   const imageUrls = images.map(({ id }) => `/image?id=${id}`);
 
   return { art, artist, images: imageUrls };
 };
 
 export const getArtistById = async (artistId: string) => {
-  const artistResult = await conn.execute(
-    "SELECT id, name, picture, description FROM artist WHERE id=?",
-    [artistId]
-  );
-  const artResult = await conn.execute(
-    "SELECT id, name FROM art WHERE artistId=?",
-    [artistId]
-  );
+  const artist = (
+    await db
+      .select({
+        id: tables.artist.id,
+        name: tables.artist.name,
+        picture: tables.artist.picture,
+        description: tables.artist.description,
+      })
+      .from(tables.artist)
+      .where(eq(tables.artist.id, artistId))
+  )[0];
 
-  const artist = artistResult.rows[0] as Artist;
-  const arts = artResult.rows as Pick<Art, "id" | "name">[];
+  const arts = await db
+    .select({
+      id: tables.art.id,
+      name: tables.art.name,
+    })
+    .from(tables.art)
+    .where(eq(tables.art.artistId, artistId));
 
   return { artist, arts };
 };
@@ -89,11 +107,9 @@ export const getArtistById = async (artistId: string) => {
 export const createSession = async (artistId: string) => {
   const sessionId = createId();
   const sessionExpires = new Date(new Date().getTime() + SESSION_DURATION);
-  const sessionRes = await conn.execute(
-    "INSERT INTO session (id, artistId, expires) VALUES (?, ?, ?)",
-    [sessionId, artistId, sessionExpires.getTime()]
-  );
-  // TODO: check query success
+  await db
+    .insert(tables.session)
+    .values({ id: sessionId, expires: sessionExpires, artistId });
 
   return { sessionId, sessionExpires };
 };
@@ -108,22 +124,25 @@ export const authUser = async ({
   email,
 }: Pick<Artist, "name" | "sub" | "picture" | "email">) => {
   // check sub exist
-  const checkRes = await conn.execute(
-    "SELECT sub, id FROM artist WHERE sub=?",
-    [sub]
-  );
+  const check = await db
+    .select({ sub: tables.artist.sub, id: tables.artist.id })
+    .from(tables.artist)
+    .where(eq(tables.artist.sub, sub));
   let artistId: string;
+  console.log(check);
 
-  if (checkRes.rows.length === 0) {
+  if (check.length === 0) {
     // create user
     artistId = createId();
-    const createRes = await conn.execute(
-      "INSERT INTO artist (id, name, email, sub, picture) VALUES (?, ?, ?, ?, ?)",
-      [artistId, name, email, sub, picture]
-    );
-    // TODO: check query success
+    await db.insert(tables.artist).values({
+      id: artistId,
+      name,
+      email,
+      sub,
+      picture,
+    });
   } else {
-    artistId = (checkRes.rows[0] as Artist).id;
+    artistId = check[0].id;
   }
 
   const { sessionId, sessionExpires } = await createSession(artistId);
@@ -136,17 +155,22 @@ export const getAuthDataBySessionId = async (sessionId: string | undefined) => {
     return { isAuthed: false };
   }
 
-  // return artist
-  const artistRes = await conn.execute(
-    "SELECT artist.id as artistId, session.id as sessionId FROM artist LEFT JOIN session ON artist.id = session.artistId WHERE session.id = ?;",
-    [sessionId]
-  );
+  const result = await db
+    .select({
+      artistId: tables.artist.id,
+      sessionId: tables.session.id,
+    })
+    .from(tables.artist)
+    .leftJoin(tables.session, eq(tables.artist.id, tables.session.artistId))
+    .where(eq(tables.session.id, sessionId));
 
-  const artistData = artistRes.rows[0] as
-    | { artistId: string; sessionId: string }
-    | undefined;
-
-  return { isAuthed: !!artistData, artist: artistData };
+  if (result.length === 0) {
+    return { isAuthed: false, artist: undefined };
+  } else if (result[0].sessionId === null) {
+    return { isAuthed: false, artist: undefined };
+  } else {
+    return { isAuthed: true, artist: result[0] };
+  }
 };
 
 export const createArt = async (
@@ -156,13 +180,12 @@ export const createArt = async (
   imageCount: number
 ) => {
   const artId = createId();
-
-  const createArtRes = await conn.execute(
-    "INSERT INTO art (id, name, description, artistId) VALUES (?, ?, ?, ?)",
-    [artId, name, description, artistId]
-  );
-
-  // TODO: check query success
+  await db.insert(tables.art).values({
+    id: artId,
+    name,
+    description,
+    artistId,
+  });
 
   // generate imageCount image upload links
   const signedUrls = await Promise.all(
@@ -186,16 +209,15 @@ export const updateArt = async (
   description: string,
   imageCount: number
 ) => {
-  const createArtRes = await conn.execute(
-    "UPDATE art SET name=?, description=? WHERE id=?;",
-    [name, description, artId]
-  );
+  await db
+    .update(tables.art)
+    .set({
+      name,
+      description,
+    })
+    .where(eq(tables.art.id, artId));
 
-  const deleteImageRes = await conn.execute("DELETE FROM image WHERE artId=?", [
-    artId,
-  ]);
-
-  // TODO: check query success
+  await db.delete(tables.image).where(eq(tables.image.artId, artId));
 
   // generate imageCount image upload links
   const signedUrls = await Promise.all(
@@ -214,23 +236,19 @@ export const updateArt = async (
 };
 
 export const deleteArt = async (artId: string, artistId: string) => {
-  const res = await conn.execute("DELETE FROM art WHERE id=? AND artistId=?", [
-    artId,
-    artistId,
-  ]);
+  await db
+    .delete(tables.art)
+    .where(and(eq(tables.art.id, artId), eq(tables.art.artistId, artistId)));
 
-  const rowsAffected = res.rowsAffected;
-
-  if (rowsAffected === 0) throw new Error("no art with id or artistId");
-  else return;
+  return;
 };
 
 export const createImage = async (id: string, artId: string) => {
-  const imageRes = await conn.execute(
-    "INSERT INTO image (id, artId, url) VALUES (?, ?, ?)",
-    [id, artId, ""]
-  );
-  // TODO: handle query res
+  await db.insert(tables.image).values({
+    id,
+    artId,
+    url: "",
+  });
 };
 
 export const updateProfile = async (
@@ -238,23 +256,24 @@ export const updateProfile = async (
   name: string,
   description: string
 ) => {
-  const res = await conn.execute(
-    "UPDATE artist SET description=?, name=? WHERE id=?",
-    [description, name, artistId]
-  );
+  await db
+    .update(tables.artist)
+    .set({
+      description,
+      name,
+    })
+    .where(eq(tables.artist.id, artistId));
 };
 
 export const updatePicture = async (artistId: string) => {
-  const res = await conn.execute("UPDATE artist SET picture=? WHERE id=?", [
-    `/image?id=${artistId}`,
-    artistId,
-  ]);
-  // TODO: handle res
+  await db
+    .update(tables.artist)
+    .set({
+      picture: `/image?id=${artistId}`,
+    })
+    .where(eq(tables.artist.id, artistId));
 };
 
 export const getAllArtists = async () => {
-  const res = await conn.execute("SELECT id, name FROM artist");
-
-  const artists = res.rows as { id: string; name: string }[];
-  return artists;
+  return await db.select().from(tables.artist);
 };

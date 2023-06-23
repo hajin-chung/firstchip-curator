@@ -1,8 +1,11 @@
-# FirstChip Curator
+# Muse Match
 
-simple art curator
+connect spaces and artists
 
-# todo list
+# TODO
 
-- [x] kakao auth
-- [ ] error handling
+1. change project name to muse match
+2. use kysley
+3. better error handling
+4. check image sizes
+5. handle env expires

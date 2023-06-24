@@ -1,7 +1,11 @@
 ---
 import ArrowButton from "@components/ArrowButton.astro";
 import Layout from "@layouts/Layout.astro";
-import { getArtistById, getAuthDataBySessionId } from "@lib/server";
+import {
+  getArtistById,
+  getArtsByArtistId,
+  getAuthDataBySessionId,
+} from "@lib/server";
 
 const { artistId } = Astro.params;
 
@@ -9,7 +13,8 @@ if (typeof artistId !== "string") {
   return Astro.redirect("/500");
 }
 
-const { artist, arts } = await getArtistById(artistId);
+const artist = await getArtistById(artistId);
+const arts = await getArtsByArtistId(artistId);
 
 if (artist === undefined) {
   return Astro.redirect("/404");
@@ -18,6 +23,8 @@ if (artist === undefined) {
 const { isAuthed, artist: authData } = await getAuthDataBySessionId(
   Astro.cookies.get("session").value
 );
+
+const isMyProfile = isAuthed && authData && authData.artistId === artistId;
 ---
 
 <Layout title={`${artist.name}`}>
@@ -25,24 +32,29 @@ const { isAuthed, artist: authData } = await getAuthDataBySessionId(
     <ArrowButton text="홈으로 돌아가기" href="/" />
   </div>
   <img
-    src={artist.picture}
-    class="h-20 w-20 rounded-full border-2 border-black dark:border-white p-[1px] object-cover"
+    class="w-full rounded-lg top-0 left-0 h-[240px] object-cover -z-10 bg-gradient-to-b"
+    src={`/image?id=header-${artist.id}`}
   />
-  <div class="flex flex-col mx-1 mt-4 w-full">
-    <div class="text-2xl font-bold">{artist.name}</div>
+  <div class="relative w-full">
+    <img
+      src={artist.picture}
+      class="h-20 w-20 absolute -top-10 left-4 rounded-full border-2 border-black dark:border-white p-[1px] object-cover"
+    />
+    <div
+      class="flex gap-4 justify-end w-full mt-2 opacity-0"
+      class:list={{ "opacity-100": isMyProfile }}
+    >
+      <a href="/art/new" class="rounded-full border-[1px] px-2 py-1 btn">
+        작품 추가하기
+      </a>
+      <a href="/me/profile" class="rounded-full border-[1px] px-2 py-1 btn">
+        프로필 수정하기
+      </a>
+    </div>
+  </div>
+  <div class="flex flex-col mx-1 mt-4 w-full ml-4">
+    <div class="text-2xl font-bold mb-2">{artist.name}</div>
     <p class="whitespace-pre-line">{artist.description}</p>
-    {
-      isAuthed && authData && authData.artistId === artistId && (
-        <div class="flex gap-4 justify-end w-full">
-          <a href="/art/new" class="rounded-full border-[1px] px-2 py-1 btn">
-            작품 추가하기
-          </a>
-          <a href="/me/profile" class="rounded-full border-[1px] px-2 py-1 btn">
-            프로필 수정하기
-          </a>
-        </div>
-      )
-    }
     <p class="text-lg font-bold mt-10">작품 목록</p>
     <div class="flex flex-col gap-1 mt-4 items-start">
       {

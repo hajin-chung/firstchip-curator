@@ -9,18 +9,26 @@ export const meRouter = router({
         name: z.string(),
         description: z.string(),
         didPictureUpdate: z.boolean(),
+        didHeaderPictureUpdate: z.boolean(),
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const { name, description, didPictureUpdate } = input;
+      const { name, description, didPictureUpdate, didHeaderPictureUpdate } =
+        input;
       const artistId = ctx.artistId;
 
       updateProfile(artistId, name, description);
 
+      let pictureUploadUrl: string | undefined;
+      let headerUploadUrl: string | undefined;
       if (didPictureUpdate) {
         await updatePicture(artistId);
-        const signedUrl = await createSignedUrl("put", artistId);
-        return signedUrl;
+        pictureUploadUrl = await createSignedUrl("put", artistId);
       }
+      if (didHeaderPictureUpdate) {
+        headerUploadUrl = await createSignedUrl("put", `header-${artistId}`);
+      }
+
+      return { pictureUploadUrl, headerUploadUrl };
     }),
 });

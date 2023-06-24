@@ -14,7 +14,7 @@ if (isAuthed !== true || authData === undefined) {
 
 const artistId = authData.artistId;
 
-const { artist, arts } = await getArtistById(artistId);
+const artist = await getArtistById(artistId);
 ---
 
 <Layout title="프로필 수정하기">

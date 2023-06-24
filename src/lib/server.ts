@@ -93,7 +93,10 @@ export const getArtistById = async (artistId: string) => {
       .from(tables.artist)
       .where(eq(tables.artist.id, artistId))
   )[0];
+  return artist;
+}
 
+export const getArtsByArtistId = async (artistId: string) => {
   const arts = await db
     .select({
       id: tables.art.id,
@@ -102,7 +105,7 @@ export const getArtistById = async (artistId: string) => {
     .from(tables.art)
     .where(eq(tables.art.artistId, artistId));
 
-  return { artist, arts };
+  return arts;
 };
 
 export const createSession = async (artistId: string) => {

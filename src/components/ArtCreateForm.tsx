@@ -5,6 +5,7 @@ import { Trash } from "./icons/Trash";
 import { Plus } from "./icons/Plus";
 import { ChevronLeft, ChevronRight } from "./icons/Chevron";
 import { Loading } from "./icons/Loading";
+import { client } from "@lib/client";
 
 export const ArtCreateForm: Component = () => {
   const [name, setName] = createSignal("");
@@ -61,38 +62,29 @@ export const ArtCreateForm: Component = () => {
     if (isLoading()) return;
     setLoading(true);
 
-    const createArtBody = {
-      name: name(),
-      description: description(),
-      imageCount: images.length,
-    };
+    try {
+      const { signedUrls, artId, artistId } = await client.art.create.mutate({
+        name: name(),
+        description: description(),
+        imageCount: images.length,
+      });
 
-    const res = await fetch("/api/art", {
-      method: "POST",
-      body: JSON.stringify(createArtBody),
-    });
+      await Promise.all(
+        signedUrls.map(async ({ signedUrl }, idx) => {
+          await fetch(signedUrl, {
+            method: "PUT",
+            body: images[idx],
+            mode: "cors",
+          });
+          // handle res
+        })
+      );
 
-    const { error, signedUrls, artId, artistId } = (await res.json()) as {
-      error: boolean;
-      signedUrls: { imageId: string; signedUrl: string }[];
-      artId: string;
-      artistId: string;
-    };
-    // TODO: handle error
-
-    await Promise.all(
-      signedUrls.map(async ({ imageId, signedUrl }, idx) => {
-        const res = await fetch(signedUrl, {
-          method: "PUT",
-          body: images[idx],
-          mode: "cors",
-        });
-        // handle res
-      })
-    );
-
-    if (window) {
-      window.location.href = `/art/${artistId}/${artId}`;
+      if (window) {
+        window.location.href = `/art/${artistId}/${artId}`;
+      }
+    } catch (e) {
+      // handle error
     }
   };
 

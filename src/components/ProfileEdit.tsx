@@ -7,11 +7,10 @@ import { Loading } from "./icons/Loading";
 import { client } from "@lib/client";
 
 type Props = {
-  artist: Artist;
-  arts: Pick<Art, "id" | "name">[];
+  artist: Pick<Artist, "id" | "name" | "picture" | "description">;
 };
 
-export const ProfileEdit: Component<Props> = ({ artist, arts }) => {
+export const ProfileEdit: Component<Props> = ({ artist }) => {
   const [name, setName] = createSignal(artist.name);
   const [picture, setPicture] = createSignal(artist.picture);
   const [description, setDescription] = createSignal(artist.description ?? "");
@@ -62,7 +61,10 @@ export const ProfileEdit: Component<Props> = ({ artist, arts }) => {
   };
 
   return (
-    <div class="flex flex-col items-start gap-4 w-full">
+    <form
+      class="flex flex-col items-start gap-4 w-full"
+      onSubmit={handleSubmit}
+    >
       <div class="grid grid-cols-2 w-full">
         <p class="mt-4">프로필 사진</p>
         <div class="relative h-20 w-20 rounded-full border-2 border-black dark:border-white p-[1px] group">
@@ -120,11 +122,12 @@ export const ProfileEdit: Component<Props> = ({ artist, arts }) => {
             btn: didUpdate(),
             "btn-disabled": !didUpdate(),
           }}
+          type="submit"
           onClick={handleSubmit}
         >
           저장하기
         </button>
       </div>
-    </div>
+    </form>
   );
 };

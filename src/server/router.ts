@@ -1,3 +1,4 @@
+import { artRouter } from "./routes/art";
 import { meRouter } from "./routes/me";
 import { authProcedure, publicProcedure, router } from "./trpc";
 
@@ -10,6 +11,7 @@ export const appRouter = router({
     return artistId;
   }),
   me: meRouter,
+  art: artRouter,
 });
 
 export type AppRouter = typeof appRouter;

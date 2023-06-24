@@ -19,5 +19,5 @@ const { artist, arts } = await getArtistById(artistId);
 
 <Layout title="프로필 수정하기">
   <ArrowButton href={`/art/${artist.id}`} text="프로필로 돌아가기" />
-  <ProfileEdit client:load artist={artist} arts={arts} />
+  <ProfileEdit client:load artist={artist} />
 </Layout>

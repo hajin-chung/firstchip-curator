@@ -1,28 +1,30 @@
-import type { Component } from "solid-js";
+import { createSignal, type Component } from "solid-js";
 import { Trash } from "./icons/Trash";
+import { client } from "@lib/client";
 
 type Props = {
   artId: string;
 };
 
 export const DeleteArtButton: Component<Props> = ({ artId }) => {
-  const handleClick = async () => {
-    const res = await fetch("/api/art", {
-      method: "DELETE",
-      body: JSON.stringify({ artId }),
-    });
+  const [error, setError] = createSignal(false);
 
-    if (res.status === 200) {
+  const handleClick = async () => {
+    try {
+      await client.art.deleteById.mutate(artId);
       if (window) window.location.href = ".";
-    } else {
-      // show error message
+    } catch (e) {
+      setError(true);
     }
   };
 
   return (
     <button
       onClick={handleClick}
-      class="h-8 w-8 p-1 border-[1px] rounded-lg btn-red"
+      classList={{
+        "h-8 w-8 p-1 border-[1px] rounded-lg btn-red": true,
+        "bg-red": error(),
+      }}
     >
       <Trash />
     </button>

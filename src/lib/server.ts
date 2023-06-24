@@ -94,16 +94,21 @@ export const getArtistById = async (artistId: string) => {
       .where(eq(tables.artist.id, artistId))
   )[0];
   return artist;
-}
+};
 
 export const getArtsByArtistId = async (artistId: string) => {
   const arts = await db
     .select({
       id: tables.art.id,
       name: tables.art.name,
+      description: tables.art.description,
+      price: tables.art.price,
+      thumbnail: tables.image.id,
     })
     .from(tables.art)
-    .where(eq(tables.art.artistId, artistId));
+    .leftJoin(tables.image, eq(tables.art.id, tables.image.artId))
+    .where(eq(tables.art.artistId, artistId))
+    .orderBy(tables.art.createdAt);
 
   return arts;
 };
@@ -200,7 +205,7 @@ export const createArt = async (
   );
 
   await Promise.all(
-    signedUrls.map(({ imageId }) => createImage(imageId, artId))
+    signedUrls.map(({ imageId }, idx) => createImage(imageId, artId, idx))
   );
 
   return { signedUrls, artId };
@@ -232,7 +237,7 @@ export const updateArt = async (
   );
 
   await Promise.all(
-    signedUrls.map(({ imageId }) => createImage(imageId, artId))
+    signedUrls.map(({ imageId }, idx) => createImage(imageId, artId, idx))
   );
 
   return { signedUrls, artId };
@@ -243,10 +248,11 @@ export const deleteArt = async (artId: string) => {
   await db.delete(tables.art).where(and(eq(tables.art.id, artId)));
 };
 
-export const createImage = async (id: string, artId: string) => {
+export const createImage = async (id: string, artId: string, idx: number) => {
   await db.insert(tables.image).values({
     id,
     artId,
+    idx,
     url: "",
   });
 };

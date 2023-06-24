@@ -1,5 +1,12 @@
 import type { InferModel } from "drizzle-orm";
-import { pgTable, varchar, text, timestamp } from "drizzle-orm/pg-core";
+import {
+  pgTable,
+  varchar,
+  text,
+  timestamp,
+  smallint,
+  bigint,
+} from "drizzle-orm/pg-core";
 
 /**
  * database schema declaration
@@ -22,12 +29,14 @@ export const art = pgTable("art", {
   id: varchar("id", { length: 10 }).primaryKey(),
   name: varchar("name", { length: 255 }).notNull(),
   description: text("description"),
+  price: bigint("price", { mode: "number" }),
   createdAt: timestamp("createdAt").defaultNow(),
   artistId: varchar("artistId", { length: 10 }).references(() => artist.id),
 });
 
 export const image = pgTable("image", {
   id: varchar("id", { length: 10 }).primaryKey(),
+  idx: smallint("idx").notNull().default(0),
   url: varchar("url", { length: 2048 }).notNull(),
   artId: varchar("artId", { length: 10 }).references(() => art.id),
 });

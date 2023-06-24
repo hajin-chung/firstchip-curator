@@ -4,9 +4,9 @@ connect spaces and artists
 
 # TODO
 
-1. change project name to muse match
-2. use kysley
-3. better error handling
-4. check image sizes
-5. handle env expires
-6. host on vercel
+- ~~change project name to muse match~~
+- ~~use drizzle~~
+- better error handling
+- check image sizes
+- handle env expires
+- ~~host on vercel~~

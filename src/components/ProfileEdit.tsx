@@ -1,9 +1,10 @@
-import { createSignal, type Component, createEffect } from "solid-js";
+import { createSignal, type Component } from "solid-js";
 import type { Art, Artist } from "@lib/type";
 import { Pencil } from "./icons/Pencil";
 import type { DOMElement } from "solid-js/jsx-runtime";
 import { Check } from "./icons/Check";
 import { Loading } from "./icons/Loading";
+import { client } from "@lib/client";
 
 type Props = {
   artist: Artist;
@@ -13,7 +14,7 @@ type Props = {
 export const ProfileEdit: Component<Props> = ({ artist, arts }) => {
   const [name, setName] = createSignal(artist.name);
   const [picture, setPicture] = createSignal(artist.picture);
-  const [description, setDescription] = createSignal(artist.description);
+  const [description, setDescription] = createSignal(artist.description ?? "");
   const [imageFile, setImageFile] = createSignal<File>();
   const [success, setSuccess] = createSignal<boolean | undefined>();
   const [isLoading, setLoading] = createSignal(false);
@@ -38,33 +39,26 @@ export const ProfileEdit: Component<Props> = ({ artist, arts }) => {
 
     setLoading(true);
     const didPictureUpdate = picture() !== artist.picture;
-    const body = {
-      name: name(),
-      description: description(),
-      didPictureUpdate,
-    };
-
-    const res = await fetch("/api/me", {
-      method: "POST",
-      body: JSON.stringify(body),
-    });
-
-    const { error, signedUrl } = (await res.json()) as {
-      error: boolean;
-      signedUrl: string | undefined;
-    };
-    setLoading(false);
-    setSuccess(!error);
-
-    if (!error && signedUrl) {
-      setLoading(true);
-      const res = await fetch(signedUrl, {
-        method: "PUT",
-        body: imageFile(),
-        mode: "cors",
+    try {
+      const signedUrl = await client.me.updateProfile.mutate({
+        name: name(),
+        description: description(),
+        didPictureUpdate,
       });
-      setLoading(false);
+
+      if (signedUrl) {
+        await fetch(signedUrl, {
+          method: "PUT",
+          body: imageFile(),
+          mode: "cors",
+        });
+      }
+
+      setSuccess(true);
+    } catch (e) {
+      setSuccess(false);
     }
+    setLoading(false);
   };
 
   return (
@@ -79,7 +73,7 @@ export const ProfileEdit: Component<Props> = ({ artist, arts }) => {
             <Pencil />
           </label>
           <img
-            src={picture()}
+            src={picture() ?? ""} // TODO: set defualt image url
             class="overflow-hidden rounded-full w-full h-full"
           />
           <input
@@ -123,7 +117,7 @@ export const ProfileEdit: Component<Props> = ({ artist, arts }) => {
         <button
           class="border-[1px] py-1 px-2 rounded-full transition self-end"
           classList={{
-            "btn": didUpdate(),
+            btn: didUpdate(),
             "btn-disabled": !didUpdate(),
           }}
           onClick={handleSubmit}

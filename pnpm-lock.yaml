@@ -26,6 +26,12 @@ dependencies:
   '@planetscale/database':
     specifier: ^1.7.0
     version: 1.7.0
+  '@trpc/client':
+    specifier: ^10.32.0
+    version: 10.32.0(@trpc/server@10.32.0)
+  '@trpc/server':
+    specifier: ^10.32.0
+    version: 10.32.0
   '@types/qrcode':
     specifier: ^1.5.0
     version: 1.5.0
@@ -2582,6 +2588,18 @@ packages:
     dependencies:
       estree-walker: 2.0.2
       picomatch: 2.3.1
+    dev: false
+
+  /@trpc/client@10.32.0(@trpc/server@10.32.0):
+    resolution: {integrity: sha512-hrj6XV84nE6DH5AmsPJ0JzIRcx3f6zU0tvS705DnZtNBOoMk7Lx+wX+KCDxj4DxLsTXC+roAxZxWwAB6/LGsXA==}
+    peerDependencies:
+      '@trpc/server': 10.32.0
+    dependencies:
+      '@trpc/server': 10.32.0
+    dev: false
+
+  /@trpc/server@10.32.0:
+    resolution: {integrity: sha512-C4HRHpaffw2pekpfNSHQtwlocq6kwAQq48mR9RIsUZGNbjXZbgvBC927vRP6QPAoG+n4oHPWyZ9G1hs3KMcPiw==}
     dev: false
 
   /@types/babel__core@7.20.1:

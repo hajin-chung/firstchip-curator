@@ -10,3 +10,4 @@ connect spaces and artists
 - check image sizes
 - handle env expires
 - ~~host on vercel~~
+- use trpc

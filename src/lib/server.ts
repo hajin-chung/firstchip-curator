@@ -3,7 +3,8 @@
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 import * as tables from "@db/schema";
-import { SESSION_DURATION, type Art, type Artist, type Image } from "./type";
+import { SESSION_DURATION } from "./type";
+import type { Artist } from "@db/schema";
 import { createId } from "@lib/utils";
 import {
   GetObjectCommand,
@@ -129,7 +130,6 @@ export const authUser = async ({
     .from(tables.artist)
     .where(eq(tables.artist.sub, sub));
   let artistId: string;
-  console.log(check);
 
   if (check.length === 0) {
     // create user

@@ -1,3 +1,4 @@
+import type { InferModel } from "drizzle-orm";
 import { pgTable, varchar, text, timestamp } from "drizzle-orm/pg-core";
 
 /**
@@ -36,3 +37,8 @@ export const session = pgTable("session", {
   artistId: varchar("artistId", { length: 10 }).references(() => artist.id),
   expires: timestamp("expires").notNull(),
 });
+
+export type Artist = InferModel<typeof artist>;
+export type Art = InferModel<typeof art>;
+export type Image = InferModel<typeof image>;
+export type Session = InferModel<typeof session>;

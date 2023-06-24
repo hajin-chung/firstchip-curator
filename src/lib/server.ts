@@ -235,12 +235,9 @@ export const updateArt = async (
   return { signedUrls, artId };
 };
 
-export const deleteArt = async (artId: string, artistId: string) => {
-  await db
-    .delete(tables.art)
-    .where(and(eq(tables.art.id, artId), eq(tables.art.artistId, artistId)));
-
-  return;
+export const deleteArt = async (artId: string) => {
+  await db.delete(tables.image).where(eq(tables.image.artId, artId));
+  await db.delete(tables.art).where(and(eq(tables.art.id, artId)));
 };
 
 export const createImage = async (id: string, artId: string) => {

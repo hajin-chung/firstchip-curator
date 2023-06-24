@@ -109,7 +109,7 @@ export const del: APIRoute = async ({ request, cookies }) => {
   };
 
   try {
-    await deleteArt(artId, artist.artistId);
+    await deleteArt(artId);
     return new Response(
       JSON.stringify({
         error: false,

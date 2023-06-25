@@ -1,0 +1,107 @@
+<canvas id="c" width="400px" height="300px"></canvas>
+
+<script is:inline>
+const canvas = document.getElementById("c");
+
+const ctx = canvas.getContext("2d");
+let width, height;
+width = ctx.canvas.width = 400;
+height = ctx.canvas.height = 300;
+
+const normalize = (x, y) => {
+  const dist = Math.sqrt(x * x + y * y);
+  return [x / dist, y / dist];
+};
+
+const random = () => {
+  return Math.random() - 0.5;
+};
+
+let vectors = [];
+let charges = [];
+
+let mx = 0;
+let my = 0;
+
+canvas.addEventListener("mousemove", (e) => {
+  mx = e.offsetX;
+  my = e.offsetY;
+  charges[0].x = mx;
+  charges[0].y = my;
+});
+
+class Charge {
+  constructor(y, x) {
+    this.y = y;
+    this.x = x;
+  }
+
+  force(y, x) {
+    return normalize(y - this.y, x - this.x);
+  }
+}
+
+class Vector {
+  constructor(y, x) {
+    this.y = y;
+    this.x = x;
+    this.vy = 0;
+    this.vx = 0;
+  }
+
+  update() {
+    this.vy = this.vx = 0;
+    charges.forEach(c => {
+      let [vy, vx] = c.force(this.y, this.x);
+      this.vy += vy * 10;
+      this.vx += vx * 10;
+    })
+  }
+
+  render() {
+    ctx.strokeStyle = "#fb923c";
+    ctx.beginPath();
+    ctx.moveTo(this.x, this.y);
+    ctx.lineTo(this.x + this.vx, this.y + this.vy);
+    ctx.stroke();
+  }
+}
+
+const init = () => {
+  const gap = 20;
+  const chargeNum = 1;
+
+  for (i = 0; i < height; i += gap) {
+    for (j = 0; j < width; j += gap) {
+      vectors.push(new Vector(i, j));
+    }
+  }
+
+  for (i = 0; i < chargeNum; i++) {
+    charges.push(new Charge(Math.random() * height, Math.random() * width));
+  }
+};
+
+const update = (dt) => {
+  vectors.forEach((v) => v.update(dt));
+};
+
+const render = () => {
+  ctx.clearRect(0, 0, width, height);
+  vectors.forEach((v) => v.render());
+};
+
+let prevTimeStamp = 0;
+const animate = (timestamp) => {
+  const dt = timestamp - prevTimeStamp;
+  prevTimeStamp = timestamp;
+
+  update(dt);
+  render();
+
+  requestAnimationFrame(animate);
+};
+
+init();
+requestAnimationFrame(animate);
+</script>

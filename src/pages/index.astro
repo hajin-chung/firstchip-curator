@@ -1,8 +1,12 @@
 ---
 import LayoutWithHeader from "@layouts/LayoutWithHeader.astro";
+import Boid from "@components/Boid.astro";
 ---
 
 <LayoutWithHeader title="Muse Match">
-  <main>
+  <main class="w-full">
+    <div class="w-full flex justify-center">
+      <Boid />
+    </div>
   </main>
 </LayoutWithHeader>

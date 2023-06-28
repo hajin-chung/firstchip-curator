@@ -4,7 +4,8 @@ module.exports = {
 	theme: {
 		extend: {
 			fontFamily: {
-				'serif': "Nanum Myeongjo"
+				'serif': "Nanum Myeongjo",
+				'writing': "Satisfy",
 			},
 			colors: {
 				yellow: {

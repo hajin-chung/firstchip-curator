@@ -7,28 +7,32 @@ const { isAuthed, artist } = await getAuthDataBySessionId(
 );
 ---
 
-<div class="w-full flex justify-end mt-2 gap-4">
-  <DarkModeToggle client:load />
-  {
-    isAuthed && artist ? (
-      <>
-        <a
-          href={`/art/${artist.artistId}`}
-          class="font-bold text-sm hover-bg p-1"
-        >
-          마이 페이지
+<div class="w-full flex justify-between items-center mt-4">
+  <div class="flex gap-10 items-center">
+    <a class="text-4xl font-writing select-none pr-2" href="/">Muse Match</a>
+    <a class="text-xl hover-bg p-1" href="/">전시</a>
+    <a class="text-xl hover-bg p-1" href="/works">작품</a>
+  </div>
+  <div class="flex gap-4">
+    <DarkModeToggle client:load />
+    {
+      isAuthed && artist ? (
+        <>
+          <a
+            href={`/art/${artist.artistId}`}
+            class="font-bold text-sm hover-bg p-1"
+          >
+            마이 페이지
+          </a>
+          <a href="/auth/logout" class="font-bold text-sm hover-bg p-1">
+            로그아웃
+          </a>
+        </>
+      ) : (
+        <a class="font-bold text-sm p-1 hover-bg" href="/auth">
+          로그인
         </a>
-        <a href="/auth/logout" class="font-bold text-sm hover-bg p-1">
-          로그아웃
-        </a>
-      </>
-    ) : (
-      <a
-        class="font-bold text-sm p-1 hover-bg"
-        href="/auth"
-      >
-        로그인
-      </a>
-    )
-  }
+      )
+    }
+  </div>
 </div>

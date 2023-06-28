@@ -6,6 +6,7 @@ import {
   timestamp,
   smallint,
   bigint,
+  primaryKey,
 } from "drizzle-orm/pg-core";
 
 /**
@@ -46,6 +47,26 @@ export const session = pgTable("session", {
   artistId: varchar("artistId", { length: 10 }).references(() => artist.id),
   expires: timestamp("expires").notNull(),
 });
+
+export const exhibit = pgTable("exhibit", {
+  id: varchar("id", { length: 10 }).primaryKey(),
+  location: text("location").notNull(),
+  startDate: timestamp("startDate").notNull(),
+  endDate: timestamp("endDate").notNull(),
+});
+
+export const exhibitArts = pgTable(
+  "exhibitArts",
+  {
+    exhibitId: varchar("exhibitId", { length: 10 }).references(
+      () => exhibit.id
+    ),
+    artId: varchar("artId", { length: 10 }).references(() => art.id),
+  },
+  (table) => {
+    return { pk: primaryKey(table.artId, table.exhibitId) };
+  }
+);
 
 export type Artist = InferModel<typeof artist>;
 export type Art = InferModel<typeof art>;

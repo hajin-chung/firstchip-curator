@@ -1,8 +1,11 @@
 ---
+import { ExhibitList } from "@components/ExhibitList";
 import LayoutWithHeader from "@layouts/LayoutWithHeader.astro";
 ---
 
 <LayoutWithHeader title="Muse Match">
-  <main class="w-full">
+  <main class="w-full flex flex-col">
+    <div class="h-10" />
+    <ExhibitList client:load />
   </main>
 </LayoutWithHeader>

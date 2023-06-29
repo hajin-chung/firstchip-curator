@@ -1,0 +1,1 @@
+ALTER TABLE "artist" ADD COLUMN "history" text DEFAULT '';

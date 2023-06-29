@@ -1,5 +1,6 @@
 ---
 import ArrowButton from "@components/ArrowButton.astro";
+import { ArtistDescription } from "@components/ArtistDescription";
 import Layout from "@layouts/Layout.astro";
 import {
   getArtistById,
@@ -54,7 +55,11 @@ const isMyProfile = isAuthed && authData && authData.artistId === artistId;
   </div>
   <div class="flex flex-col mt-4 w-full px-4">
     <div class="text-2xl font-bold mb-2">{artist.name}</div>
-    <p class="whitespace-pre-line">{artist.description}</p>
+    <ArtistDescription
+      description={artist.description}
+      history={artist.history}
+      client:load
+    />
     <p class="text-lg font-bold mt-10">작품 목록</p>
     <div class="flex flex-col gap-8 mt-4 items-start">
       {

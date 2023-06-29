@@ -89,6 +89,7 @@ export const getArtistById = async (artistId: string) => {
         name: tables.artist.name,
         picture: tables.artist.picture,
         description: tables.artist.description,
+        history: tables.artist.history,
       })
       .from(tables.artist)
       .where(eq(tables.artist.id, artistId))
@@ -260,13 +261,15 @@ export const createImage = async (id: string, artId: string, idx: number) => {
 export const updateProfile = async (
   artistId: string,
   name: string,
-  description: string
+  description: string,
+  history: string
 ) => {
   await db
     .update(tables.artist)
     .set({
-      description,
       name,
+      description,
+      history,
     })
     .where(eq(tables.artist.id, artistId));
 };

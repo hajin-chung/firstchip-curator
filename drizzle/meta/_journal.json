@@ -36,6 +36,13 @@
       "when": 1687954441744,
       "tag": "0004_glorious_kabuki",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "5",
+      "when": 1688046103309,
+      "tag": "0005_bizarre_lucky_pierre",
+      "breakpoints": true
     }
   ]
 }

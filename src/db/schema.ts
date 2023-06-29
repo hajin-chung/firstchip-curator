@@ -24,6 +24,7 @@ export const artist = pgTable("artist", {
   picture: text("picture"),
   createdAt: timestamp("createdAt").defaultNow(),
   description: text("description").default(""),
+  history: text("history").default(""),
 });
 
 export const art = pgTable("art", {

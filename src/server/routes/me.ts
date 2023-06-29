@@ -8,16 +8,22 @@ export const meRouter = router({
       z.object({
         name: z.string(),
         description: z.string(),
+        history: z.string(),
         didPictureUpdate: z.boolean(),
         didHeaderPictureUpdate: z.boolean(),
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const { name, description, didPictureUpdate, didHeaderPictureUpdate } =
-        input;
+      const {
+        name,
+        description,
+        history,
+        didPictureUpdate,
+        didHeaderPictureUpdate,
+      } = input;
       const artistId = ctx.artistId;
 
-      updateProfile(artistId, name, description);
+      updateProfile(artistId, name, description, history);
 
       let pictureUploadUrl: string | undefined;
       let headerUploadUrl: string | undefined;

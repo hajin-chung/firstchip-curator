@@ -6,13 +6,15 @@ import { Loading } from "./icons/Loading";
 import { client } from "@lib/client";
 
 type Props = {
-  artist: Pick<Artist, "id" | "name" | "picture" | "description">;
+  artist: Pick<Artist, "id" | "name" | "picture" | "description" | "history">;
 };
 
 export const ProfileEdit: Component<Props> = ({ artist }) => {
+  // TODO: use createStore
   const [name, setName] = createSignal(artist.name);
   const [picture, setPicture] = createSignal(artist.picture);
   const [description, setDescription] = createSignal(artist.description ?? "");
+  const [history, setHistory] = createSignal(artist.history ?? "");
   const [imageFile, setImageFile] = createSignal<File>();
   const [headerFile, setHeaderFile] = createSignal<File>();
   const [headerPicture, setHeaderPicture] = createSignal(
@@ -26,6 +28,7 @@ export const ProfileEdit: Component<Props> = ({ artist }) => {
   const didUpdate = () =>
     name() !== artist.name ||
     description() !== artist.description ||
+    history() !== artist.history ||
     didPictureUpdate() ||
     didHeaderPictureUpdate();
 
@@ -55,6 +58,7 @@ export const ProfileEdit: Component<Props> = ({ artist }) => {
         await client.me.updateProfile.mutate({
           name: name(),
           description: description(),
+          history: history(),
           didPictureUpdate: didPictureUpdate(),
           didHeaderPictureUpdate: didHeaderPictureUpdate(),
         });
@@ -151,6 +155,15 @@ export const ProfileEdit: Component<Props> = ({ artist }) => {
           value={description()}
           onInput={(e) => setDescription(e.currentTarget.value)}
           placeholder={description()}
+        />
+      </div>
+      <div class="grid grid-cols-2 w-full">
+        <p>연혁</p>
+        <textarea
+          class="p-1 border-[1px] border-black dark:border-white dark:bg-neutral-900 rounded-lg"
+          value={history()}
+          onInput={(e) => setHistory(e.currentTarget.value)}
+          placeholder={history()}
         />
       </div>
       <div class="self-end gap-2 flex items-center">

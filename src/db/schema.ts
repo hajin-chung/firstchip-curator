@@ -7,6 +7,7 @@ import {
   smallint,
   bigint,
   primaryKey,
+  pgEnum,
 } from "drizzle-orm/pg-core";
 
 /**
@@ -27,11 +28,16 @@ export const artist = pgTable("artist", {
   history: text("history").default(""),
 });
 
+const artStatusValues = ["SALE", "PREPARE", "SOLD"] as const;
+
+export const artStatusEnum = pgEnum("status", artStatusValues);
+
 export const art = pgTable("art", {
   id: varchar("id", { length: 10 }).primaryKey(),
   name: varchar("name", { length: 255 }).notNull(),
   description: text("description"),
   price: bigint("price", { mode: "number" }),
+  status: artStatusEnum("status").notNull().default("PREPARE"),
   createdAt: timestamp("createdAt").defaultNow(),
   artistId: varchar("artistId", { length: 10 }).references(() => artist.id),
 });
@@ -71,5 +77,6 @@ export const exhibitArts = pgTable(
 
 export type Artist = InferModel<typeof artist>;
 export type Art = InferModel<typeof art>;
+export type ArtStatus = (typeof artStatusValues)[number];
 export type Image = InferModel<typeof image>;
 export type Session = InferModel<typeof session>;

@@ -1,0 +1,1 @@
+ALTER TABLE "art" ADD COLUMN "status" text DEFAULT 'PREPARE' NOT NULL;

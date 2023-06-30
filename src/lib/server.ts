@@ -104,6 +104,7 @@ export const getArtsByArtistId = async (artistId: string) => {
       name: tables.art.name,
       description: tables.art.description,
       price: tables.art.price,
+      status: tables.art.status,
       thumbnail: tables.image.id,
     })
     .from(tables.art)

@@ -108,8 +108,8 @@ export const getArtsByArtistId = async (artistId: string) => {
       thumbnail: tables.image.id,
     })
     .from(tables.art)
-    .leftJoin(tables.image, eq(tables.art.id, tables.image.artId))
-    .where(eq(tables.art.artistId, artistId))
+    .rightJoin(tables.image, eq(tables.art.id, tables.image.artId))
+    .where(and(eq(tables.art.artistId, artistId), eq(tables.image.idx, 0)))
     .orderBy(tables.art.createdAt);
 
   return arts;

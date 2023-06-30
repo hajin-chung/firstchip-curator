@@ -1,0 +1,26 @@
+---
+import type { ArtStatus } from "@db/schema";
+
+export interface Props {
+  status: ArtStatus | null;
+}
+
+const { status } = Astro.props;
+
+const messages: Record<ArtStatus, string> = {
+  PREPARE: "준비중",
+  SALE: "판매중",
+  SOLD: "판매 완료",
+};
+---
+
+<div
+  class="p-0.5 text-white text-sm rounded-lg border-2 border-opacity-60 bg-opacity-70"
+  class:list={{
+    "bg-green-600 border-green-600": status === "SALE",
+    "bg-blue-600 border-blue-600": status === "PREPARE",
+    "bg-red-500 border-red-500": status === "SOLD",
+  }}
+>
+  {status && messages[status]}
+</div>

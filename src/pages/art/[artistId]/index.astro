@@ -1,5 +1,6 @@
 ---
 import ArrowButton from "@components/ArrowButton.astro";
+import ArtStatusBadge from "@components/ArtStatusBadge.astro";
 import { ArtistDescription } from "@components/ArtistDescription";
 import Layout from "@layouts/Layout.astro";
 import {
@@ -63,8 +64,8 @@ const isMyProfile = isAuthed && authData && authData.artistId === artistId;
     <p class="text-lg font-bold mt-10">작품 목록</p>
     <div class="flex flex-col gap-8 mt-4 items-start">
       {
-        arts.map(({ id, name, description, thumbnail, price }) => (
-          <div class="w-full h-[200px] flex gap-4">
+        arts.map(({ id, name, description, thumbnail, price, status }) => (
+          <div class="w-full h-[200px] flex gap-4 rounded-lg border-2 p-4 relative">
             <div class="bg-opacity-20 w-[400px] h-full flex">
               <img
                 src={`/image?id=${thumbnail}`}
@@ -83,6 +84,9 @@ const isMyProfile = isAuthed && authData && authData.artistId === artistId;
               </div>
 
               <p class="text-sm">{description}</p>
+            </div>
+            <div class="absolute bottom-0 right-0 m-4">
+              <ArtStatusBadge status={status} />
             </div>
           </div>
         ))

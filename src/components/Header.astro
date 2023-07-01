@@ -1,19 +1,26 @@
 ---
 import { getAuthDataBySessionId } from "@lib/server";
 import { DarkModeToggle } from "./DrakModeToggle";
+import { MenuIcon } from "./icons/Menu";
 
 const { isAuthed, artist } = await getAuthDataBySessionId(
   Astro.cookies.get("session").value
 );
 ---
 
-<div class="w-full flex justify-between items-center mt-4">
-  <div class="flex gap-10 items-center">
+<header class="w-full flex justify-between items-center mt-4">
+  <div class="flex gap-6 md:gap-10 items-center">
     <a class="text-4xl font-writing select-none pr-2" href="/">Muse Match</a>
-    <a class="text-lg hover-bg p-1" href="/">전시</a>
-    <a class="text-lg hover-bg p-1" href="/works">작품</a>
+    <a class="text-lg hover-bg p-1 hidden md:block" href="/">전시</a>
+    <a class="text-lg hover-bg p-1 hidden md:block" href="/works">작품</a>
   </div>
-  <div class="flex gap-4">
+  <button
+    class="h-8 w-8 p-1 border-[1px] rounded-lg btn md:hidden"
+    id="menuButton"
+  >
+    <MenuIcon client:load />
+  </button>
+  <div class="md:flex gap-4 flex-col hidden md:flex-row">
     <DarkModeToggle client:load />
     {
       isAuthed && artist ? (
@@ -35,4 +42,63 @@ const { isAuthed, artist } = await getAuthDataBySessionId(
       )
     }
   </div>
+</header>
+<div
+  class="hidden absolute top-0 left-0 w-screen h-screen z-30 backdrop-brightness-50 transition"
+  id="menu"
+>
+  <div class="w-full backdrop-brightness-50" id="menuEscape"></div>
+  <div
+    class="flex flex-col h-full justify-between p-4 w-2/5 z-50 dark:bg-neutral-800 bg-white shadow-lg rounded-xl"
+  >
+    <div class="flex flex-col gap-4 items-start">
+      <a class="text-lg hover-bg p-1" href="/">전시</a>
+      <a class="text-lg hover-bg p-1" href="/works">작품</a>
+    </div>
+    <div class="flex flex-col gap-4 items-start">
+      <DarkModeToggle client:load />
+      {
+        isAuthed && artist ? (
+          <>
+            <a
+              href={`/art/${artist.artistId}`}
+              class="font-bold text-sm hover-bg p-1"
+            >
+              마이 페이지
+            </a>
+            <a href="/auth/logout" class="font-bold text-sm hover-bg p-1">
+              로그아웃
+            </a>
+          </>
+        ) : (
+          <a class="font-bold text-sm p-1 hover-bg" href="/auth">
+            로그인
+          </a>
+        )
+      }
+    </div>
+  </div>
 </div>
+
+<script>
+  const menuButtonElement = document.getElementById("menuButton");
+  const menuElement = document.getElementById("menu");
+  const menuEscapeElement = document.getElementById("menuEscape");
+
+  const toggleMenu = () => {
+    if (menuElement) {
+      menuElement.style.display =
+        menuElement.style.display === "none" ? "flex" : "none";
+    }
+  };
+
+  menuButtonElement?.addEventListener("click", () => {
+    toggleMenu();
+  });
+
+  menuEscapeElement?.addEventListener("click", (e) => {
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+    toggleMenu();
+  });
+</script>

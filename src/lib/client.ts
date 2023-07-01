@@ -1,5 +1,6 @@
 import { createTRPCProxyClient, httpBatchLink } from "@trpc/client";
 import type { AppRouter } from "@server/router";
+import imageCompression from "browser-image-compression";
 
 export const client = createTRPCProxyClient<AppRouter>({
   links: [
@@ -15,3 +16,7 @@ export const client = createTRPCProxyClient<AppRouter>({
     }),
   ],
 });
+
+export const compressImage = async (image: File) => {
+  return imageCompression(image, { maxSizeMB: 1 });
+};

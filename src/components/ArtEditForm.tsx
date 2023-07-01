@@ -5,7 +5,7 @@ import { Trash } from "./icons/Trash";
 import { Plus } from "./icons/Plus";
 import { ChevronLeft, ChevronRight } from "./icons/Chevron";
 import { Loading } from "./icons/Loading";
-import { client } from "@lib/client";
+import { client, compressImage } from "@lib/client";
 
 type Props = {
   artId: string;
@@ -100,14 +100,16 @@ export const ArtEditForm: Component<Props> = ({
 
       await Promise.all(
         signedUrls.map(async ({ signedUrl }, idx) => {
-          // handle res
+          const compressedImage = await compressImage(images[idx]);
           await fetch(signedUrl, {
             method: "PUT",
-            body: images[idx],
+            body: compressedImage,
             mode: "cors",
           });
+          // handle res
         })
       );
+
       if (window) {
         window.location.href = `/art/${artistId}/${artId}`;
       }

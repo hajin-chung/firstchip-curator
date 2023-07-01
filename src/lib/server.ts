@@ -287,3 +287,56 @@ export const updatePicture = async (artistId: string) => {
 export const getAllArtists = async () => {
   return await db.select().from(tables.artist);
 };
+
+export const getAllExhibits = async () => {
+  return await db.select().from(tables.exhibit);
+};
+
+export const updateExhibit = async (
+  id: string,
+  location: string,
+  startDate: Date,
+  endDate: Date
+) => {
+  return await db
+    .update(tables.exhibit)
+    .set({
+      location,
+      startDate,
+      endDate,
+    })
+    .where(eq(tables.exhibit.id, id));
+};
+
+export const createExhibit = async (
+  location: string,
+  startDate: Date,
+  endDate: Date
+) => {
+  const id = createId();
+
+  await db.insert(tables.exhibit).values({
+    id,
+    location,
+    startDate,
+    endDate,
+  });
+
+  const signedUrl = createSignedUrl("put", id);
+
+  return signedUrl;
+};
+
+export const deleteExhibit = async (id: string) => {
+  await db
+    .delete(tables.exhibitArts)
+    .where(eq(tables.exhibitArts.exhibitId, id));
+  await db.delete(tables.exhibit).where(eq(tables.exhibit.id, id));
+};
+
+export const addArtToExhibit = async (artId: string, exhibitId: string) => {
+  await db.insert(tables.exhibitArts).values({
+    artId,
+    exhibitId,
+  });
+};

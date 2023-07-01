@@ -1,4 +1,5 @@
 import { artRouter } from "./routes/art";
+import { exhibitRouter } from "./routes/exhibit";
 import { meRouter } from "./routes/me";
 import { authProcedure, publicProcedure, router } from "./trpc";
 
@@ -11,6 +12,7 @@ export const appRouter = router({
     return artistId;
   }),
   me: meRouter,
+  exhibit: exhibitRouter,
   art: artRouter,
 });
 

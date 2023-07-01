@@ -1,21 +1,51 @@
 ---
 import LayoutWithHeader from "@layouts/LayoutWithHeader.astro";
-import { getAllArtists } from "@lib/server";
+import {
+  getAllArtists,
+  getAllExhibits,
+  getAuthDataBySessionId,
+} from "@lib/server";
+import { ExhibitCard } from "@components/admin/ExhibitCard";
+import { ExhibitAddButton } from "@components/admin/ExhibitAddButton";
 
-// TODO: check if admin
+const { isAuthed, artist: authData } = await getAuthDataBySessionId(
+  Astro.cookies.get("session").value
+);
+
+if (isAuthed !== true || authData === undefined) {
+  return Astro.redirect("/auth");
+}
+
 const artists = await getAllArtists();
+const exhibits = await getAllExhibits();
 ---
 
 <LayoutWithHeader title="admin page">
-  {
-    artists.map(({ id, name }) => (
-      <a href={`/admin/as/${id}`} class="hover-bg p-1 rounded-lg artist" id={id}>
-        {name}
-      </a>
-    ))
-  }
-  <div class="h-4"></div>
-  <a href="/admin/as/create" class="hover-bg p-1 rounded-lg"
-    >새 아티스트 추가하기</a
+  <div
+    class="border-1 p-4 flex flex-col gap-2 border-2 w-full rounded-lg items-start mt-4"
   >
+    <p class="text-xl">사용자 관리</p>
+    {
+      artists.map(({ id, name }) => (
+        <a
+          href={`/admin/as/${id}`}
+          class="hover-bg p-1 rounded-lg artist"
+          id={id}
+        >
+          {name}
+        </a>
+      ))
+    }
+    <div class="h-4"></div>
+    <a href="/admin/as/create" class="hover-bg p-1 rounded-lg"
+      >새 아티스트 추가하기</a
+    >
+  </div>
+  <div
+    class="border-1 p-4 flex flex-col gap-8 border-2 w-full rounded-lg items-start mt-4"
+  >
+    <p class="text-xl">전시 관리</p>
+    {exhibits.map((exhibit) => <ExhibitCard {...exhibit} client:load />)}
+    <ExhibitAddButton client:load />
+  </div>
 </LayoutWithHeader>

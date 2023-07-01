@@ -88,7 +88,7 @@ const { isAuthed, artist } = await getAuthDataBySessionId(
   const toggleMenu = () => {
     if (menuElement) {
       menuElement.style.display =
-        menuElement.style.display === "none" ? "flex" : "none";
+        menuElement.style.display !== "flex" ? "flex" : "none";
     }
   };
 

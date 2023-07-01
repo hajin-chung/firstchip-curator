@@ -131,11 +131,11 @@ export const ArtEditForm: Component<Props> = ({
           />
           {selected() === undefined && (
             <label
-              class="bg-gray-100 w-full h-full rounded-lg shadow-lg flex justify-center items-center group border-black transition cursor-pointer"
+              class="bg-gray-100 dark:bg-neutral-900 dark:border-gray-100 dark:border-2 w-full h-full rounded-lg shadow-lg flex justify-center items-center group border-black transition cursor-pointer"
               for="imageInput"
             >
               <label
-                class="text-xl flex justify-center items-center cursor-pointer text-gray-300 group-hover:text-gray-700 border-black w-20 h-20 transition"
+                class="text-xl flex justify-center items-center cursor-pointer text-gray-300 dark:group-hover:text-white group-hover:text-gray-700 border-black w-20 h-20 transition"
                 for="imageInput"
               >
                 <Plus />
@@ -145,7 +145,7 @@ export const ArtEditForm: Component<Props> = ({
           {selected() !== undefined && (
             <img
               src={URL.createObjectURL(images[selected()!])}
-              class="w-full h-full rounded-lg shadow-lg"
+              class="w-full h-full rounded-lg shadow-lg object-contain"
             />
           )}
         </div>
@@ -154,9 +154,8 @@ export const ArtEditForm: Component<Props> = ({
             <button
               class="h-8 w-8 p-1 border-[1px] rounded-lg"
               classList={{
-                "text-red-400 border-red-400 hover:bg-red-400 hover:text-white":
-                  selected() !== undefined,
-                "text-gray-400 border-gray-400": selected() === undefined,
+                "btn-red": selected() !== undefined,
+                "btn-disabled": selected() === undefined,
               }}
               onClick={handleRemove}
             >
@@ -164,7 +163,7 @@ export const ArtEditForm: Component<Props> = ({
             </button>
             <div class="w-4" />
             <label
-              class="h-8 w-8 p-1 border-[1px] rounded-lg                text-black border-black hover:bg-black hover:text-white"
+              class="h-8 w-8 p-1 border-[1px] rounded-lg btn"
               for="imageInput"
             >
               <Plus />
@@ -175,8 +174,8 @@ export const ArtEditForm: Component<Props> = ({
             <button
               class={`h-8 w-8 p-1 border-[1px] rounded-lg ${
                 selected() !== undefined && selected()! > 0
-                  ? "border-black hover:bg-black hover:text-white"
-                  : "text-gray-400 border-gray-400"
+                  ? "btn"
+                  : "btn-disabled"
               }`}
               onClick={handleLeft}
             >
@@ -192,8 +191,8 @@ export const ArtEditForm: Component<Props> = ({
             <button
               class={`h-8 w-8 p-1 border-[1px] rounded-lg ${
                 selected() !== undefined && selected()! < images.length - 1
-                  ? "border-black hover:bg-black hover:text-white"
-                  : "text-gray-400 border-gray-400"
+                  ? "btn"
+                  : "btn-disabled"
               }`}
               onClick={handleRight}
             >
@@ -208,7 +207,7 @@ export const ArtEditForm: Component<Props> = ({
         <input
           value={name()}
           onInput={(evt) => setName(evt.currentTarget.value)}
-          class="border-[1px] p-1 border-black rounded-lg flex-1"
+          class="border-[1px] p-1 border-black dark:border-white dark:bg-neutral-900 rounded-lg flex-1"
         />
       </div>
       <div class="h-2" />
@@ -217,7 +216,7 @@ export const ArtEditForm: Component<Props> = ({
         <textarea
           value={description()}
           onInput={(evt) => setDescription(evt.currentTarget.value)}
-          class="border-[1px] p-1 border-black rounded-lg flex-1"
+          class="border-[1px] p-1 border-black dark:border-white dark:bg-neutral-900 rounded-lg flex-1"
         />
       </div>
       <div class="h-4" />

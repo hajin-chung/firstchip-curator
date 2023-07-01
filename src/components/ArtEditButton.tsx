@@ -6,7 +6,7 @@ type Props = {
   artId: string;
 };
 
-export const EditArtButton: Component<Props> = ({ artId }) => {
+export const ArtEditButton : Component<Props> = ({ artId }) => {
   const handleClick = async () => {
 		if (window) window.location.href = `/me/art/${artId}`;
   };

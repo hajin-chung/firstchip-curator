@@ -6,7 +6,7 @@ type Props = {
   artId: string;
 };
 
-export const DeleteArtButton: Component<Props> = ({ artId }) => {
+export const ArtDeleteButton: Component<Props> = ({ artId }) => {
   const [error, setError] = createSignal(false);
 
   const handleClick = async () => {

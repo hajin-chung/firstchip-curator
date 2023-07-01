@@ -1,7 +1,7 @@
 ---
 import ArrowButton from "@components/ArrowButton.astro";
-import { DeleteArtButton } from "@components/DeleteArtButton";
-import { EditArtButton } from "@components/EditArtButton";
+import { ArtDeleteButton } from "@components/ArtDeleteButton";
+import { ArtEditButton } from "@components/ArtEditButton";
 import { Images } from "@components/Images";
 import { Qrcode } from "@components/Qrcode";
 import { Home } from "@components/icons/Home";
@@ -44,8 +44,8 @@ const { isAuthed, artist: authData } = await getAuthDataBySessionId(
   {
     isAuthed && authData && authData.artistId === artistId && (
       <div class="flex gap-4 self-end">
-        <DeleteArtButton artId={artId} client:load />
-        <EditArtButton artId={artId} client:load />
+        <ArtDeleteButton artId={artId} client:load />
+        <ArtEditButton artId={artId} client:load />
       </div>
     )
   }

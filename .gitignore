@@ -23,3 +23,6 @@ pnpm-debug.log*
 
 # vercel build
 .vercel
+
+# netlify build
+.netlify

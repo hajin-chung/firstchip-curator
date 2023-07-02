@@ -11,9 +11,9 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@astrojs/netlify": "^2.3.0",
     "@astrojs/solid-js": "^2.1.1",
     "@astrojs/tailwind": "^3.1.2",
-    "@astrojs/vercel": "^3.5.0",
     "@aws-sdk/client-s3": "^3.332.0",
     "@aws-sdk/s3-request-presigner": "^3.332.0",
     "@paralleldrive/cuid2": "^2.2.0",

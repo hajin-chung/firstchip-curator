@@ -57,6 +57,7 @@ export const session = pgTable("session", {
 
 export const exhibit = pgTable("exhibit", {
   id: varchar("id", { length: 10 }).primaryKey(),
+  title: text("title").default("").notNull(),
   location: text("location").notNull(),
   startDate: timestamp("startDate").notNull(),
   endDate: timestamp("endDate").notNull(),

@@ -57,6 +57,13 @@
       "when": 1688141257198,
       "tag": "0007_purple_screwball",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "5",
+      "when": 1688303859717,
+      "tag": "0008_free_susan_delgado",
+      "breakpoints": true
     }
   ]
 }

@@ -1,0 +1,1 @@
+ALTER TABLE "exhibit" ADD COLUMN "title" text DEFAULT '' NOT NULL;

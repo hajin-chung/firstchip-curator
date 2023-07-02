@@ -1,4 +1,4 @@
-import { client } from "@lib/client";
+import { client, uploadImage } from "@lib/client";
 import type { Exhibit } from "@lib/type";
 import { toISOLocal } from "@lib/utils";
 import { createSignal, type Component } from "solid-js";
@@ -9,10 +9,18 @@ type Props = Exhibit;
 export const ExhibitCard: Component<Props> = (props) => {
   const [exhibit, setExhibit] = createStore(props);
   const [isLoading, setLoading] = createSignal(false);
+  const [imageFile, setImageFile] = createSignal<File | null>(null);
+  console.log(props);
+
+  const handleFileInput = (fileList: FileList | null) => {
+    if (fileList) setImageFile(() => fileList.item(0));
+  }
 
   const handleSubmit = async () => {
     setLoading(true);
-    await client.exhibit.updateExhibit.mutate(exhibit);
+    const signedUrl = await client.exhibit.updateExhibit.mutate(exhibit);
+    const image = imageFile();
+    if (image) await uploadImage(signedUrl, image);
     setLoading(false);
   };
 
@@ -20,15 +28,25 @@ export const ExhibitCard: Component<Props> = (props) => {
     setLoading(true);
     await client.exhibit.deleteExhibitById.mutate(exhibit.id);
     setLoading(false);
-  }
+  };
 
   return (
     <div class="flex flex-col w-full gap-1">
+      <img src={`/image?id=${exhibit.id}`} />
       <div class="flex w-full justify-between">
         <p>image</p>
         <input
           class="w-1/2 bg-transparent border-2 rounded-lg p-1"
           type="file"
+          onInput={(e) => handleFileInput(e.target.files)}
+        />
+      </div>
+      <div class="flex w-full justify-between">
+        <p>title</p>
+        <input
+          class="w-1/2 bg-transparent border-2 rounded-lg p-1"
+          value={exhibit.title}
+          onInput={(e) => setExhibit({ ...exhibit, title: e.target.value })}
         />
       </div>
       <div class="flex w-full justify-between">

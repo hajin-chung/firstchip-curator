@@ -7,29 +7,26 @@ export const exhibitRouter = router({
     .input(
       z.object({
         id: z.string(),
+        title: z.string(),
         location: z.string(),
         startDate: z.date(),
         endDate: z.date(),
       })
     )
     .mutation(async ({ input }) => {
-      return await updateExhibit(
-        input.id,
-        input.location,
-        input.startDate,
-        input.endDate
-      );
+      return await updateExhibit(input);
     }),
   createExhibit: authProcedure
     .input(
       z.object({
+        title: z.string(),
         location: z.string(),
         startDate: z.date(),
         endDate: z.date(),
       })
     )
     .mutation(async ({ input }) => {
-      return createExhibit(input.location, input.startDate, input.endDate);
+      return createExhibit(input);
     }),
   deleteExhibitById: authProcedure
     .input(z.string())

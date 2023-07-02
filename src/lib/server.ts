@@ -3,7 +3,7 @@
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 import * as tables from "@db/schema";
-import { SESSION_DURATION } from "./type";
+import { Exhibit, SESSION_DURATION } from "./type";
 import type { Artist } from "@db/schema";
 import { createId } from "@lib/utils";
 import {
@@ -292,34 +292,24 @@ export const getAllExhibits = async () => {
   return await db.select().from(tables.exhibit);
 };
 
-export const updateExhibit = async (
-  id: string,
-  location: string,
-  startDate: Date,
-  endDate: Date
-) => {
-  return await db
+export const updateExhibit = async (newExhibit: Exhibit) => {
+  await db
     .update(tables.exhibit)
-    .set({
-      location,
-      startDate,
-      endDate,
-    })
-    .where(eq(tables.exhibit.id, id));
+    .set(newExhibit)
+    .where(eq(tables.exhibit.id, newExhibit.id));
+
+  const signedUrl = createSignedUrl("put", newExhibit.id);
+  return signedUrl;
 };
 
 export const createExhibit = async (
-  location: string,
-  startDate: Date,
-  endDate: Date
+  newExhibit: Pick<Exhibit, "location" | "endDate" | "startDate" | "title">
 ) => {
   const id = createId();
 
   await db.insert(tables.exhibit).values({
     id,
-    location,
-    startDate,
-    endDate,
+    ...newExhibit,
   });
 
   const signedUrl = createSignedUrl("put", id);

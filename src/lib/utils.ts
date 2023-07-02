@@ -13,6 +13,6 @@ export const jsonToUrlEncoded = (body: { [key: string]: string }) => {
 };
 
 export function toISOLocal(adate: Date) {
-  var localdt = new Date(adate.valueOf() - adate.getTimezoneOffset() * 60000);
-  return localdt.toISOString().slice(0, -1);
+  // var localdt = new Date(adate.valueOf() - adate.getTimezoneOffset() * 60000);
+  return adate.toISOString().slice(0, -1);
 }

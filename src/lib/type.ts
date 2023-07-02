@@ -9,6 +9,8 @@ export type Image = InferModel<typeof image>;
 export type Session = InferModel<typeof session>;
 export type Exhibit = InferModel<typeof exhibit>;
 
+export type ExhibitFilter = "now" | "preparing" | "done";
+
 export type EventHandler = (evt: {
   currentTarget: HTMLInputElement;
   target: DOMElement;

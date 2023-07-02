@@ -1,8 +1,18 @@
-import { createExhibit, deleteExhibit, updateExhibit } from "@lib/server";
-import { authProcedure, router } from "../trpc";
+import { createExhibit, deleteExhibit, getAllExhibits, updateExhibit } from "@lib/server";
+import { authProcedure, publicProcedure, router } from "../trpc";
 import { z } from "zod";
+import { toISOLocal } from "@lib/utils";
+import type { ExhibitFilter } from "@lib/type";
 
 export const exhibitRouter = router({
+  getAllExhibits: publicProcedure.query(async () => {
+    return await getAllExhibits();
+  }),
+  getExhibitsByFilter: publicProcedure
+    .input(z.string())
+    .query(async ({ input }) => {
+      // return await getExhibitsByFilter(input as ExhibitFilter);
+    }),
   updateExhibit: authProcedure
     .input(
       z.object({

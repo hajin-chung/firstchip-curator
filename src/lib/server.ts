@@ -3,16 +3,16 @@
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 import * as tables from "@db/schema";
-import { Exhibit, SESSION_DURATION } from "./type";
+import { Exhibit, ExhibitFilter, SESSION_DURATION } from "./type";
 import type { Artist } from "@db/schema";
-import { createId } from "@lib/utils";
+import { createId, toISOLocal } from "@lib/utils";
 import {
   GetObjectCommand,
   PutObjectCommand,
   S3Client,
 } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
-import { and, eq } from "drizzle-orm";
+import { and, eq, gte, lt } from "drizzle-orm";
 
 const DATABASE_URI = import.meta.env.DATABASE_URI;
 const client = postgres(DATABASE_URI);
@@ -330,3 +330,7 @@ export const addArtToExhibit = async (artId: string, exhibitId: string) => {
     exhibitId,
   });
 };
+
+export const getExhibitsByFilter = async (filter: ExhibitFilter) => {
+  const nowTimeStamp = toISOLocal(new Date());
+}

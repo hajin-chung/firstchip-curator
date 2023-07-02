@@ -35,6 +35,8 @@
   },
   "devDependencies": {
     "@astrojs/partytown": "^1.2.1",
+    "@babel/core": "^7.22.5",
+    "@babel/preset-env": "^7.22.5",
     "drizzle-kit": "^0.19.2",
     "wrangler": "^2.20.0"
   }

@@ -5,7 +5,7 @@ import { Trash } from "./icons/Trash";
 import { Plus } from "./icons/Plus";
 import { ChevronLeft, ChevronRight } from "./icons/Chevron";
 import { Loading } from "./icons/Loading";
-import { client, compressImage } from "@lib/client";
+import { client, compressImage, uploadImage } from "@lib/client";
 
 export const ArtCreateForm: Component = () => {
   const [name, setName] = createSignal("");
@@ -70,15 +70,9 @@ export const ArtCreateForm: Component = () => {
       });
 
       await Promise.all(
-        signedUrls.map(async ({ signedUrl }, idx) => {
-          const compressedImage = await compressImage(images[idx]);
-          await fetch(signedUrl, {
-            method: "PUT",
-            body: compressedImage,
-            mode: "cors",
-          });
-          // handle res
-        })
+        signedUrls.map(({ signedUrl }, idx) =>
+          uploadImage(signedUrl, images[idx])
+        )
       );
 
       if (window) {

@@ -15,3 +15,12 @@ export const client = createTRPCProxyClient<AppRouter>({
 export const compressImage = async (image: File) => {
   return imageCompression(image, { maxSizeMB: 1 });
 };
+
+export const uploadImage = async (url: string, image: File) => {
+  const compressedImage = await compressImage(image);
+  await fetch(url, {
+    method: "PUT",
+    body: compressedImage,
+    mode: "cors",
+  });
+};

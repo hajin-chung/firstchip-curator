@@ -3,7 +3,7 @@
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 import * as tables from "@db/schema";
-import { Exhibit, ExhibitFilter, SESSION_DURATION } from "./type";
+import { ArtStatus, Exhibit, ExhibitFilter, SESSION_DURATION } from "./type";
 import type { Artist } from "@db/schema";
 import { createId, toISOLocal } from "@lib/utils";
 import {
@@ -12,7 +12,7 @@ import {
   S3Client,
 } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
-import { and, eq, gte, lt } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 
 const DATABASE_URI = import.meta.env.DATABASE_URI;
 const client = postgres(DATABASE_URI);
@@ -52,6 +52,8 @@ export const getArtById = async (artId: string, artistId: string) => {
         name: tables.art.name,
         description: tables.art.description,
         artistId: tables.art.artistId,
+        price: tables.art.price,
+        status: tables.art.status,
       })
       .from(tables.art)
       .where(eq(tables.art.id, artId))
@@ -217,6 +219,8 @@ export const updateArt = async (
   artId: string,
   name: string,
   description: string,
+  price: number | null,
+  status: ArtStatus,
   imageCount: number
 ) => {
   await db
@@ -224,6 +228,8 @@ export const updateArt = async (
     .set({
       name,
       description,
+      price,
+      status,
     })
     .where(eq(tables.art.id, artId));
 
@@ -333,4 +339,4 @@ export const addArtToExhibit = async (artId: string, exhibitId: string) => {
 
 export const getExhibitsByFilter = async (filter: ExhibitFilter) => {
   const nowTimeStamp = toISOLocal(new Date());
-}
+};

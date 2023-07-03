@@ -6,11 +6,15 @@ import { Plus } from "./icons/Plus";
 import { ChevronLeft, ChevronRight } from "./icons/Chevron";
 import { Loading } from "./icons/Loading";
 import { client, compressImage } from "@lib/client";
+import { artStatusValues, type ArtStatus } from "@lib/type";
+import { artStatusToMessage } from "@lib/utils";
 
 type Props = {
   artId: string;
   name: string;
   description: string;
+  price: number | null;
+  status: ArtStatus;
   images: string[];
 };
 
@@ -18,11 +22,15 @@ export const ArtEditForm: Component<Props> = ({
   artId,
   name: oldName,
   description: oldDescription,
+  price: oldPrice,
+  status: oldStatus,
   images: oldImages,
 }) => {
   const [name, setName] = createSignal(oldName);
   const [description, setDescription] = createSignal(oldDescription);
   const [images, setImages] = createStore<File[]>([]);
+  const [price, setPrice] = createSignal(oldPrice);
+  const [status, setStatus] = createSignal(oldStatus);
   const [selected, setSelected] = createSignal<number | undefined>();
   const [isLoading, setLoading] = createSignal(false);
   let imageInputRef!: HTMLInputElement;
@@ -95,6 +103,8 @@ export const ArtEditForm: Component<Props> = ({
         artId,
         name: name(),
         description: description(),
+        price: price(),
+        status: status(),
         imageCount: images.length,
       });
 
@@ -218,6 +228,31 @@ export const ArtEditForm: Component<Props> = ({
           onInput={(evt) => setDescription(evt.currentTarget.value)}
           class="border-[1px] p-1 border-black dark:border-white dark:bg-neutral-900 rounded-lg flex-1"
         />
+      </div>
+      <div class="h-2" />
+      <div class="flex gap-2 w-full items-center">
+        <p class="font-xl font-bold">가격</p>
+        <div class="w-2/5" />
+        <input
+          value={price() ?? 0}
+          type="number"
+          onInput={(evt) => setPrice(parseInt(evt.currentTarget.value))}
+          class="border-[1px] p-1 border-black dark:border-white dark:bg-neutral-900 rounded-lg flex-1"
+        />
+        <p class="font-xl font-bold">원</p>
+      </div>
+      <div class="h-2" />
+      <div class="flex gap-2 w-full items-center">
+        <p class="font-xl font-bold">판매 상태</p>
+        <div class="w-2/5" />
+        <select
+          class="border-[1px] p-1 border-black dark:border-white dark:bg-neutral-900 rounded-lg flex-1"
+          onInput={(e) => setStatus(e.target.value as ArtStatus)}
+        >
+          {artStatusValues.map((s) => (
+            <option value={s}>{artStatusToMessage(s)}</option>
+          ))}
+        </select>
       </div>
       <div class="h-4" />
       <div class="flex self-end gap-4 items-center">

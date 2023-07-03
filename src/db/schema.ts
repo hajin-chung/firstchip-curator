@@ -1,3 +1,4 @@
+import { artStatusValues } from "@lib/type";
 import type { InferModel } from "drizzle-orm";
 import {
   pgTable,
@@ -27,8 +28,6 @@ export const artist = pgTable("artist", {
   description: text("description").default(""),
   history: text("history").default(""),
 });
-
-const artStatusValues = ["SALE", "PREPARE", "SOLD"] as const;
 
 export const artStatusEnum = pgEnum("status", artStatusValues);
 

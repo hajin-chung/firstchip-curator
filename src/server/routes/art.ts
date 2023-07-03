@@ -1,4 +1,5 @@
 import { createArt, deleteArt, updateArt } from "@lib/server";
+import { artStatusValues } from "@lib/type";
 import { authProcedure, router } from "@server/trpc";
 import { z } from "zod";
 
@@ -29,16 +30,20 @@ export const artRouter = router({
         artId: z.string(),
         name: z.string(),
         description: z.string(),
+        price: z.number().nullable(),
+        status: z.enum(artStatusValues),
         imageCount: z.number(),
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const { artId, name, description, imageCount } = input;
+      const { artId, name, description, imageCount, price, status } = input;
       const artistId = ctx.artistId;
       const { signedUrls } = await updateArt(
         artId,
         name,
         description,
+        price,
+        status,
         imageCount
       );
 

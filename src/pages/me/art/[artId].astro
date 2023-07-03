@@ -28,7 +28,9 @@ const { art, artist, images } = await getArtById(artId, authData.artistId);
   <ArtEditForm
 		artId={artId}
     name={art.name}
-    description={art.description}
+    description={art.description ?? ""}
+    price={art.price}
+    status={art.status}
     images={images}
     client:load
   />

@@ -1,17 +1,12 @@
 ---
 import type { ArtStatus } from "@db/schema";
+import { artStatusToMessage } from "@lib/utils";
 
 export interface Props {
   status: ArtStatus | null;
 }
 
 const { status } = Astro.props;
-
-const messages: Record<ArtStatus, string> = {
-  PREPARE: "준비중",
-  SALE: "판매중",
-  SOLD: "판매 완료",
-};
 ---
 
 <div
@@ -22,5 +17,5 @@ const messages: Record<ArtStatus, string> = {
     "bg-red-500 border-red-500": status === "SOLD",
   }}
 >
-  {status && messages[status]}
+  {status && artStatusToMessage(status)}
 </div>

@@ -14,8 +14,10 @@ if (typeof artistId !== "string") {
   return Astro.redirect("/500");
 }
 
-const artist = await getArtistById(artistId);
-const arts = await getArtsByArtistId(artistId);
+const [artist, arts] = await Promise.all([
+  getArtistById(artistId),
+  getArtsByArtistId(artistId),
+]);
 
 if (artist === undefined) {
   return Astro.redirect("/404");
@@ -77,7 +79,7 @@ const isMyProfile = isAuthed && authData && authData.artistId === artistId;
                 >
                   {name}
                 </a>
-                <p></p>
+                <p />
                 {price ? <p>{price} &#8361; </p> : <p>가격 미정</p>}
               </div>
 

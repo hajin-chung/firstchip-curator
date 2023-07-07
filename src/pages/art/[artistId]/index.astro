@@ -14,18 +14,15 @@ if (typeof artistId !== "string") {
   return Astro.redirect("/500");
 }
 
-const [artist, arts] = await Promise.all([
+const [artist, arts, { isAuthed, artist: authData }] = await Promise.all([
   getArtistById(artistId),
   getArtsByArtistId(artistId),
+  getAuthDataBySessionId(Astro.cookies.get("session").value),
 ]);
 
 if (artist === undefined) {
   return Astro.redirect("/404");
 }
-
-const { isAuthed, artist: authData } = await getAuthDataBySessionId(
-  Astro.cookies.get("session").value
-);
 
 const isMyProfile = isAuthed && authData && authData.artistId === artistId;
 ---

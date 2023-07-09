@@ -1,6 +1,7 @@
 import { client } from "@lib/client";
 import type { Exhibit, ExhibitFilter } from "@lib/type";
 import { createSignal, type Component, createEffect, onMount } from "solid-js";
+import { ChevronRight } from "./icons/Chevron";
 
 const exhibitFilters: readonly { mode: ExhibitFilter; name: string }[] = [
   { mode: "now", name: "진행 중인 전시" },
@@ -56,15 +57,26 @@ export const ExhibitList: Component = () => {
         )}
         {filteredExhibits().map(
           ({ id, location, title, endDate, startDate }) => (
-            <div class="flex flex-col gap-2">
-              <p class="font-bold text-xl">{title}</p>
-              <div />
-              <p class="text-sm">위치: {location}</p>
-              <p class="">
-                기간: {startDate.toLocaleDateString()}~
-                {endDate.toLocaleDateString()}
-              </p>
-            </div>
+            <a
+              class="rounded-xl filter aspect-[5/1] overflow-hidden relative group"
+              href="/"
+            >
+              <div class="w-8 h-8 absolute z-20 bottom-4 right-4 text-gray-500 group-hover:text-white transition">
+                <ChevronRight />
+              </div>
+              <div class="flex flex-col justify-end gap-2 z-10 absolute w-full h-full bg-black rounded-xl p-4 bg-opacity-50 transition">
+                <p class="font-bold text-2xl mb-10">{title}</p>
+                <p class="text-sm">위치: {location}</p>
+                <p class="">
+                  기간: {startDate.toLocaleDateString()}~
+                  {endDate.toLocaleDateString()}
+                </p>
+              </div>
+              <img
+                class="w-full h-full object-cover absolute top-0 left-0 blur-sm z-0 group-hover:blur-none transition"
+                src={`/image?id=${id}`}
+              />
+            </a>
           )
         )}
       </div>

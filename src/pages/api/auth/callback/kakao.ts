@@ -33,11 +33,16 @@ export const get: APIRoute = async ({ request, redirect }) => {
       throw "jwt string not string";
     }
 
-    const { sub, nickname, email, picture } = jwt_decode(jwtString) as {
-      sub: string;
-      nickname: string;
-      picture: string;
-      email: string;
+    const {
+      sub = "",
+      nickname = "",
+      email = "",
+      picture = "",
+    } = jwt_decode(jwtString) as {
+      sub: string | undefined;
+      nickname: string | undefined;
+      picture: string | undefined;
+      email: string | undefined;
     };
 
     if (

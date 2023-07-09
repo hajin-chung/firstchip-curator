@@ -1,6 +1,11 @@
-import { createArt, deleteArt, updateArt } from "@lib/server";
+import {
+  createArt,
+  deleteArt,
+  getArtsByArtistId,
+  updateArt,
+} from "@lib/server";
 import { artStatusValues } from "@lib/type";
-import { authProcedure, router } from "@server/trpc";
+import { authProcedure, publicProcedure, router } from "@server/trpc";
 import { z } from "zod";
 
 export const artRouter = router({
@@ -52,4 +57,7 @@ export const artRouter = router({
   deleteById: authProcedure.input(z.string()).mutation(async ({ input }) => {
     await deleteArt(input);
   }),
+  getArtsByArtistId: publicProcedure
+    .input(z.string())
+    .query(async ({ input }) => getArtsByArtistId(input)),
 });

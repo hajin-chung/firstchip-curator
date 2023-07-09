@@ -1,12 +1,8 @@
 ---
 import LayoutWithHeader from "@layouts/LayoutWithHeader.astro";
-import ArtStatusBadge from "@components/ArtStatusBadge.astro";
 import { ArtistDescription } from "@components/ArtistDescription";
-import {
-  getArtistById,
-  getArtsByArtistId,
-  getAuthDataBySessionId,
-} from "@lib/server";
+import { getArtistById, getAuthDataBySessionId } from "@lib/server";
+import { ArtList } from "@components/ArtList";
 
 const { artistId } = Astro.params;
 
@@ -14,9 +10,8 @@ if (typeof artistId !== "string") {
   return Astro.redirect("/500");
 }
 
-const [artist, arts, { isAuthed, artist: authData }] = await Promise.all([
+const [artist, { isAuthed, artist: authData }] = await Promise.all([
   getArtistById(artistId),
-  getArtsByArtistId(artistId),
   getAuthDataBySessionId(Astro.cookies.get("session").value),
 ]);
 
@@ -57,42 +52,6 @@ const isMyProfile = isAuthed && authData && authData.artistId === artistId;
       history={artist.history}
       client:load
     />
-    <p class="text-lg font-bold mt-10">작품 목록</p>
-    <div class="flex flex-col gap-8 mt-4 items-start">
-      {
-        arts.map(({ id, name, description, thumbnail, price, status }) => (
-          <div class="w-full flex gap-4 rounded-lg border-2 p-4 relative flex-col md:flex-row md:items-start items-center">
-            <div class="bg-opacity-20 w-full max-w-[400px] h-[200px] flex justify-center">
-              <img
-                src={`/image?id=${thumbnail}`}
-                class="w-[300px] object-contain"
-              />
-            </div>
-            <div class="flex flex-col gap-2 w-full">
-              <div class="flex w-full justify-between items-end flex-wrap">
-                <a
-                  href={`/art/${artistId}/${id}`}
-                  class="font-extrabold text-xl"
-                >
-                  {name}
-                </a>
-                <p />
-                {price ? <p>{price} &#8361; </p> : <p>가격 미정</p>}
-              </div>
-
-              <p class="text-sm">{description}</p>
-            </div>
-            <div class="absolute bottom-0 right-0 m-4">
-              <ArtStatusBadge status={status} />
-            </div>
-          </div>
-        ))
-      }
-    </div>
-    {
-      arts.length === 0 && (
-        <div class="self-center text-gray-500 mt-10">작품 없음</div>
-      )
-    }
+    <ArtList artistId={artistId} client:load />
   </div>
 </LayoutWithHeader>

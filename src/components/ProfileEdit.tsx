@@ -98,7 +98,7 @@ export const ProfileEdit: Component<Props> = ({ artist }) => {
         <p class="mt-4">헤더 사진</p>
         <div class="relative h-20 w-full rounded-lg border-2 border-black dark:border-white p-[1px] group">
           <label
-            for="pictureInput"
+            for="headerPictureInput"
             class="absolute z-10 top-0 left-0 w-full h-full bg-opacity-80 bg-white text-black hidden group-hover:flex justify-center items-center hover:cursor-pointer"
           >
             <div class="w-7 h-7">
@@ -111,7 +111,7 @@ export const ProfileEdit: Component<Props> = ({ artist }) => {
           />
           <input
             class="hidden"
-            id="pictureInput"
+            id="headerPictureInput"
             type="file"
             onInput={handleHeaderInput}
           />

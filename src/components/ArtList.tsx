@@ -51,7 +51,7 @@ const ArtCard: Component<
         </a>
         <p />
         {price ? <p>{price} &#8361; </p> : <p>가격 미정</p>}
-        <p class="text-sm">{description}</p>
+        <p class="text-sm whitespace-pre">{description}</p>
         {/* <ArtStatusBadge status={status} /> */}
       </div>
     </div>

@@ -16,7 +16,7 @@ import { and, eq } from "drizzle-orm";
 
 const DATABASE_URI = import.meta.env.DATABASE_URI;
 const client = postgres(DATABASE_URI);
-const db = drizzle(client, { logger: true });
+const db = drizzle(client);
 
 const ACCOUNT_ID = import.meta.env.CLOUDFLARE_ACCOUNT_ID;
 const ACCESS_KEY = import.meta.env.R2_ACCESS_KEY;

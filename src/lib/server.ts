@@ -16,7 +16,7 @@ import { and, eq } from "drizzle-orm";
 
 const DATABASE_URI = import.meta.env.DATABASE_URI;
 const client = postgres(DATABASE_URI);
-const db = drizzle(client);
+const db = drizzle(client, { logger: true });
 
 const ACCOUNT_ID = import.meta.env.CLOUDFLARE_ACCOUNT_ID;
 const ACCESS_KEY = import.meta.env.R2_ACCESS_KEY;
@@ -339,4 +339,37 @@ export const addArtToExhibit = async (artId: string, exhibitId: string) => {
 
 export const getExhibitsByFilter = async (filter: ExhibitFilter) => {
   const nowTimeStamp = toISOLocal(new Date());
+};
+
+export const getExhibitById = async (exhibitId: string) => {
+  return (await db
+    .select({
+      id: tables.exhibit.id,
+      title: tables.exhibit.title,
+      location: tables.exhibit.location,
+      startDate: tables.exhibit.startDate,
+      endDate: tables.exhibit.endDate,
+    })
+    .from(tables.exhibit)
+    .where(eq(tables.exhibit.id, exhibitId)))[0];
+};
+
+export const getExhibitArtsById = async (exhibitId: string) => {
+  return await db
+    .select({
+      artId: tables.art.id,
+      artName: tables.art.name,
+      artDescription: tables.art.description,
+      thumbnail: tables.image.id,
+      artPrice: tables.art.price,
+      artStatus: tables.art.status,
+      artistId: tables.artist.id,
+      artistName: tables.artist.name,
+    })
+    .from(tables.exhibitArts)
+    .leftJoin(tables.art, eq(tables.exhibitArts.artId, tables.art.id))
+    .leftJoin(tables.image, eq(tables.art.id, tables.image.artId))
+    .leftJoin(tables.artist, eq(tables.art.artistId, tables.artist.id))
+    .where(eq(tables.image.idx, 0))
+    .where(eq(tables.exhibitArts.exhibitId, exhibitId));
 };

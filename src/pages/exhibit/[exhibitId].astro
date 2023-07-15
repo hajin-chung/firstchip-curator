@@ -1,0 +1,58 @@
+---
+import LayoutWithHeader from "@/layouts/LayoutWithHeader.astro";
+import { getExhibitById, getExhibitArtsById } from "@lib/server";
+
+const { exhibitId } = Astro.params;
+
+if (!exhibitId) {
+  Astro.redirect(`/404`);
+  return;
+}
+
+const [exhibit, arts] = await Promise.all([
+  getExhibitById(exhibitId),
+  getExhibitArtsById(exhibitId)
+]);
+---
+
+<LayoutWithHeader title="전시">
+  <main class="w-full flex flex-col">
+    <div class="h-8"></div>
+    <div class="w-full h-[240px] relative rounded-xl overflow-hidden">
+      <div class="flex flex-col justify-end gap-2 z-10 absolute w-full h-full bg-black rounded-xl p-4 bg-opacity-50 transition text-white">
+        <p class="font-bold text-2xl mb-10 self-center">{exhibit.title}</p>
+        <p class="text-sm">위치: {exhibit.location}</p>
+        <p class="">
+          기간: {exhibit.startDate.toLocaleDateString()}~
+          {exhibit.endDate.toLocaleDateString()}
+        </p>
+      </div>
+      <img
+        class="w-full h-full object-cover absolute top-0 left-0 blur-sm z-0  transition "
+        src={`/image?id=${exhibitId}`}
+      />
+    </div>
+    <div class="flex flex-col gap-12 items-center mt-20">
+    {arts.map(({thumbnail, artistName, artName, artPrice, artistId, artId, artDescription}) => (
+      <div class="flex gap-10 flex-col justify-center items-center">
+        <img
+          src={`/image?id=${thumbnail}`}
+          class="max-h-[60vh] object-contain group-hover:blur-sm transition drop-shadow-2xl"
+        />
+        <div class="flex flex-col items-center">
+          <a href={`/art/${artistId}/${artId}`} class="font-extrabold text-xl">
+            {artName}
+          </a>-
+          <a href={`/art/${artistId}`} class="font-extrabold text-xl">
+            {artistName}
+          </a>
+          <p />
+          {artPrice ? <p>{artPrice} &#8361; </p> : <p>가격 미정</p>}
+          <p class="text-sm whitespace-pre">{artDescription}</p>
+        </div>
+              <div class="w-[20vw] bg-gray-500 h-[2px]" />
+      </div>
+    ))}
+    </div>
+  </main>
+</LayoutWithHeader>

@@ -13,10 +13,13 @@ export const ExhibitList: Component = () => {
   const [filter, setFilter] = createSignal<number>(0); // index of exhibitFilters
   const [exhibits, setExhibits] = createSignal<Exhibit[]>([]);
   const [filteredExhibits, setFilterExhibits] = createSignal<Exhibit[]>([]);
+  const [isLoading, setLoading] = createSignal(false);
 
   onMount(async () => {
+    setLoading(true);
     const fetchedExhibits = await client.exhibit.getAllExhibits.query();
     setExhibits(fetchedExhibits);
+    setLoading(false);
   });
 
   createEffect(() => {
@@ -58,13 +61,13 @@ export const ExhibitList: Component = () => {
         {filteredExhibits().map(
           ({ id, location, title, endDate, startDate }) => (
             <a
-              class="rounded-xl filter aspect-[5/1] overflow-hidden relative group"
-              href="/"
+              class="rounded-xl filter h-[180px] w-full overflow-hidden relative group"
+              href={`/exhibit/${id}`}
             >
               <div class="w-8 h-8 absolute z-20 bottom-4 right-4 text-gray-500 group-hover:text-white transition">
                 <ChevronRight />
               </div>
-              <div class="flex flex-col justify-end gap-2 z-10 absolute w-full h-full bg-black rounded-xl p-4 bg-opacity-50 transition">
+              <div class="flex flex-col justify-end gap-2 z-10 absolute w-full h-full bg-black rounded-xl p-4 bg-opacity-50 transition text-white">
                 <p class="font-bold text-2xl mb-10">{title}</p>
                 <p class="text-sm">위치: {location}</p>
                 <p class="">

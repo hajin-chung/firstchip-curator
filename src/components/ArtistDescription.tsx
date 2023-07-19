@@ -31,7 +31,7 @@ export const ArtistDescription: Component<Props> = ({
           연혁
         </button>
       </div>
-      <p class="whitespace-pre">{showDescription() ? description : history}</p>
+      <p class="whitespace-pre-wrap">{showDescription() ? description : history}</p>
     </div>
   );
 };

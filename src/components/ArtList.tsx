@@ -52,7 +52,7 @@ const ArtCard: Component<
         </a>
         <p />
         {price ? <p>{price} &#8361; </p> : <p>가격 미정</p>}
-        <p class="text-sm whitespace-pre">{description}</p>
+        <p class="text-sm whitespace-pre-wrap">{description}</p>
       </div>
     </div>
   );
@@ -65,7 +65,7 @@ const LoadingArtCard: Component = () => {
       <div class="flex flex-col items-center w-[10vw] h-[5vh] rounded-lg overflow-clip">
         <div class="skeleton" />
         <p />
-        <p class="text-sm whitespace-pre skeleton" />
+        <p class="text-sm whitespace-pre-wrap skeleton" />
       </div>
     </div>
   );

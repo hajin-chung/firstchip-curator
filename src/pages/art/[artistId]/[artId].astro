@@ -49,5 +49,8 @@ const { isAuthed, artist: authData } = await getAuthDataBySessionId(
       </div>
     )
   }
-  <Qrcode useCurrent={true} url="" client:load />
+  <div class="flex gap-4 items-end self-end">
+    <p>구매문의 010-6351-4161</p>
+    <Qrcode useCurrent={true} url="" client:load />
+  </div>
 </Layout>
